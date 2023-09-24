@@ -1,4 +1,5 @@
 plugins {
+    id "io.freefair.lombok" version "8.2.2"
     id "application"
 }
 
@@ -7,6 +8,9 @@ repositories {
 }
 
 dependencies {
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.15.2"
+    implementation "org.apache.httpcomponents.client5:httpclient5-fluent:5.2.1"
+    implementation "commons-io:commons-io:2.13.0"
     
     testImplementation "org.junit.jupiter:junit-jupiter:5.9.3"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
