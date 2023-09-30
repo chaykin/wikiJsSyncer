@@ -13,21 +13,22 @@ import ru.chaykin.wjss.config.ApplicationConfig;
 import ru.chaykin.wjss.db.DatabaseUtils;
 import ru.chaykin.wjss.graphql.model.PageItem;
 import ru.chaykin.wjss.graphql.model.PageListItem;
+import ru.chaykin.wjss.utils.PageContentType;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class DownloadPageAction {
     private static final String INSERT_PAGE_QUERY = """
-		INSERT OR REPLACE INTO pages(
-				id, title, locale,
-				remote_path, local_path,
-				remote_update_at, local_update_at,
-				content_type, tags)
-			VALUES(?,?,?,?,?,?,?,?,?)""";
+		    INSERT OR REPLACE INTO pages(
+		    		id, title, locale,
+		    		remote_path, local_path,
+		    		remote_update_at, local_update_at,
+		    		content_type, tags)
+		    	VALUES(?,?,?,?,?,?,?,?,?)""";
 
     public void execute(Connection connection, PageListItem pageListItem, PageItem pageItem) {
 	String repoPath = ApplicationConfig.get("wiki.js.pages.repository");
-	Path pagePath = Path.of(repoPath, pageItem.path() + ".md"); //TODO ext!
+	Path pagePath = Path.of(repoPath, buildLocalPagePath(pageListItem));
 
 	try {
 	    Files.createDirectories(pagePath.getParent());
@@ -48,5 +49,10 @@ public class DownloadPageAction {
 	} catch (IOException | SQLException e) {
 	    throw new RuntimeException(e);
 	}
+    }
+
+    private String buildLocalPagePath(PageListItem pageListItem) {
+	String extension = PageContentType.of(pageListItem.contentType()).getExtension();
+	return String.format("%s.%s", pageListItem.path(), extension);
     }
 }
