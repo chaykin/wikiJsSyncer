@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.client5.http.fluent.Response;
@@ -14,6 +15,7 @@ import ru.chaykin.wjss.config.ApplicationConfig;
 
 import static org.apache.hc.core5.http.ContentType.APPLICATION_JSON;
 
+@Log4j2
 public class ClientApi {
     private static final String ENDPOINT = ApplicationConfig.get("wiki.js.graphql.endpoint");
 
@@ -23,6 +25,7 @@ public class ClientApi {
     private String authToken;
 
     public <T> T query(Class<T> type, String query) {
+	log.debug("Execute query: {}", query);
 	try {
 	    Request request = Request.get(createLocation(query));
 	    return executeRequest(type, request);
@@ -32,6 +35,8 @@ public class ClientApi {
     }
 
     public <T> T mutation(Class<T> type, String query) {
+	log.debug("Execute mutation: {}", query);
+
 	String body = String.format("{\"query\": \"%s\"}", query);
 
 	Request request = Request.post(ENDPOINT).bodyString(body, APPLICATION_JSON);
@@ -47,6 +52,8 @@ public class ClientApi {
 	    Response response = request.execute();
 
 	    byte[] content = response.returnContent().asBytes();
+	    log.trace("Raw response: {}", () -> new String(content));
+
 	    return mapper.readValue(content, type);
 	} catch (IOException e) {
 	    throw new RuntimeException("Failed to execute request", e);
