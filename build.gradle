@@ -14,6 +14,7 @@ dependencies {
     implementation "org.apache.commons:commons-lang3:3.12.0"
     implementation "org.apache.logging.log4j:log4j-core:2.20.0"
     implementation "org.xerial:sqlite-jdbc:3.43.0.0"
+    implementation "commons-codec:commons-codec:1.16.0"
     
     testImplementation "org.junit.jupiter:junit-jupiter:5.9.3"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
