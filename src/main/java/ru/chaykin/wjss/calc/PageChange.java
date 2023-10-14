@@ -1,4 +1,4 @@
-package ru.chaykin.wjss.action.change;
+package ru.chaykin.wjss.calc;
 
 import java.util.Collections;
 import java.util.HashSet;

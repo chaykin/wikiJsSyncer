@@ -1,4 +1,4 @@
-package ru.chaykin.wjss.action.change;
+package ru.chaykin.wjss.calc;
 
 public enum ChangeType {
     REMOTE_NEW,
