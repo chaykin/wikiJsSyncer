@@ -47,7 +47,8 @@ public class ChangesCalc {
 
 	    if (rp == null) {
 		addChange(changes, lp, REMOTE_DELETED);
-	    } else if (lp.getContent() == null) {
+	    }
+	    if (lp.getContent() == null) {
 		addChange(changes, lp, LOCAL_DELETED);
 	    } else if (isLocalUpdated(lp)) {
 		addChange(changes, lp, LOCAL_UPDATED);
