@@ -24,6 +24,10 @@ public class PageChange {
 	return Collections.unmodifiableSet(changes);
     }
 
+    public boolean hasConflicts() {
+	return changes.size() > 1;
+    }
+
     @Override
     public String toString() {
 	return String.format("[%s] (%s) %s", StringUtils.join(changes, ", "), page.getId(), page.getRemotePath());

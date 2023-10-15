@@ -28,7 +28,7 @@ public class LocalPage implements IPage {
 	remotePath = rs.getString("remote_path");
 	localPath = Path.of(rs.getString("local_path"));
 	contentType = rs.getString("content_type");
-	remoteUpdatedAt = rs.getLong("remote_updated_at");
+	remoteUpdatedAt = rs.getLong("remote_update_at");
 	md5Hash = rs.getString("md5_hash");
 	tags = rs.getString("tags");
     }
@@ -96,7 +96,9 @@ public class LocalPage implements IPage {
 	return Arrays.asList(tags.split(","));
     }
 
-    public boolean isExists() {
-	return Files.exists(getLocalPath());
+    @Override
+    public String toString() {
+	return String.format("LocalPage[id=%s, contentType=%s, md5Hash=%s, localPath=%s]",
+			getId(), getContentType(), getMd5Hash(), getLocalPath());
     }
 }

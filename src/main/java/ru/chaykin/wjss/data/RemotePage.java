@@ -77,6 +77,12 @@ public class RemotePage implements IPage {
 	return pageListItem.tags();
     }
 
+    @Override
+    public String toString() {
+	return String.format("RemotePage[id=%s, contentType=%s, md5Hash=%s, remotePath=%s]",
+			getId(), getContentType(), getMd5Hash(), getRemotePath());
+    }
+
     private PageItem getPageItem() {
 	if (pageItem == null) {
 	    pageItem = new PageQuery(api).fetchPage(getId());

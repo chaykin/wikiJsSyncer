@@ -188,8 +188,7 @@ class ChangesCalcTest {
 	return changes.stream().collect(Collectors.toMap(c -> c.getPage().getId(), Function.identity()));
     }
 
-    private void assertChange(PageChange change, ChangeType... types) {
-	Assertions.assertEquals(types.length, change.getChanges().size());
-	Assertions.assertEquals(Set.of(types), change.getChanges());
+    private void assertChange(PageChange change, ChangeType... expectedTypes) {
+	Assertions.assertEquals(Set.of(expectedTypes), change.getChanges());
     }
 }
