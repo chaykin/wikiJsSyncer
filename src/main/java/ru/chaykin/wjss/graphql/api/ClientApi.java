@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.client5.http.fluent.Response;
 import org.apache.hc.core5.net.URIBuilder;
@@ -37,7 +38,7 @@ public class ClientApi {
     public <T> T mutation(Class<T> type, String query) {
 	log.debug("Execute mutation: {}", query);
 
-	String body = String.format("{\"query\": \"%s\"}", query);
+	String body = String.format("{\"query\": \"%s\"}", StringEscapeUtils.escapeJava(query));
 
 	Request request = Request.post(ENDPOINT).bodyString(body, APPLICATION_JSON);
 	return executeRequest(type, request);

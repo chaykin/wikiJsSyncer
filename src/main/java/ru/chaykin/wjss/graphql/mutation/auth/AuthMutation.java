@@ -6,7 +6,15 @@ import ru.chaykin.wjss.graphql.model.auth.AuthInfo;
 
 @RequiredArgsConstructor
 public class AuthMutation {
-    private static final String AUTH_MUTATION = "mutation{authentication{login(username: \\\"%s\\\", password: \\\"%s\\\", strategy: \\\"%s\\\"){responseResult { succeeded errorCode slug message } jwt}}}";
+    private static final String AUTH_MUTATION = """
+		    mutation {
+		    	authentication {
+		    		login(username: "%s", password: "%s", strategy: "%s") {
+		    			responseResult { succeeded errorCode slug message }
+		    			jwt
+		    		}
+		    	}
+		    }""";
 
     private final ClientApi api;
 
