@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import ru.chaykin.wjss.action.IChangeTypeAction;
+import ru.chaykin.wjss.calc.PageChange;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.data.IPage;
 import ru.chaykin.wjss.db.DatabaseUtils;
@@ -21,7 +22,8 @@ public class RemoteNewChangeTypeAction implements IChangeTypeAction {
 		    	VALUES(?,?,?,?,?,?,?,?,?,?)""";
 
     @Override
-    public void execute(Context context, IPage page) {
+    public void execute(Context context, PageChange pageChange) {
+	IPage page  = pageChange.getRemotePage();
 	log.debug("Creating new local page: {}", page);
 
 	try {

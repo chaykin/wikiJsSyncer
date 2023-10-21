@@ -30,7 +30,6 @@ public class DatabaseManager {
 	try (Connection c = DriverManager.getConnection(DB_URL)) {
 	    c.setAutoCommit(false);
 	    executor.execute(c);
-	    c.commit();
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}

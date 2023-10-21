@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 import ru.chaykin.wjss.context.Context;
@@ -35,9 +36,9 @@ public class ChangesCalc {
 	    LocalPage lp = localPages.get(pe.getKey());
 
 	    if (lp == null) {
-		addChange(changes, rp, REMOTE_NEW);
-	    } else if (isRemoteUpdated(rp, lp)) {
-		addChange(changes, rp, REMOTE_UPDATED);
+		addChange(changes, lp, rp, REMOTE_NEW);
+	    } else if (isRemoteUpdated(lp, rp)) {
+		addChange(changes, lp, rp, REMOTE_UPDATED);
 	    }
 	}
 
@@ -46,19 +47,19 @@ public class ChangesCalc {
 	    LocalPage lp = le.getValue();
 
 	    if (rp == null) {
-		addChange(changes, lp, REMOTE_DELETED);
+		addChange(changes, lp, rp, REMOTE_DELETED);
 	    }
 	    if (lp.getContent() == null) {
-		addChange(changes, lp, LOCAL_DELETED);
+		addChange(changes, lp, rp, LOCAL_DELETED);
 	    } else if (isLocalUpdated(lp)) {
-		addChange(changes, lp, LOCAL_UPDATED);
+		addChange(changes, lp, rp, LOCAL_UPDATED);
 	    }
 	}
 
 	return changes.values();
     }
 
-    private boolean isRemoteUpdated(RemotePage rp, LocalPage lp) {
+    private boolean isRemoteUpdated(LocalPage lp, RemotePage rp) {
 	return rp.getRemoteUpdatedAt() != lp.getRemoteUpdatedAt() && !Objects.equals(rp.getMd5Hash(), lp.getMd5Hash());
     }
 
@@ -66,7 +67,9 @@ public class ChangesCalc {
 	return !Objects.equals(lp.getMd5Hash(), PageHashUtils.md5PageHash(lp));
     }
 
-    private void addChange(Map<Long, PageChange> changes, IPage page, ChangeType changeType) {
-	changes.computeIfAbsent(page.getId(), k -> new PageChange(page)).addChange(changeType);
+    private void addChange(Map<Long, PageChange> changes, LocalPage localPage,
+		    RemotePage remotePage, ChangeType changeType) {
+	long id = Optional.<IPage>ofNullable(localPage).orElse(remotePage).getId();
+	changes.computeIfAbsent(id, k -> new PageChange(localPage, remotePage)).addChange(changeType);
     }
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import lombok.extern.log4j.Log4j2;
 import ru.chaykin.wjss.action.IChangeTypeAction;
+import ru.chaykin.wjss.calc.PageChange;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.data.IPage;
 import ru.chaykin.wjss.db.DatabaseUtils;
@@ -20,7 +21,8 @@ public class LocalUpdatedChangeTypeAction implements IChangeTypeAction {
 		    WHERE id = ?""";
 
     @Override
-    public void execute(Context context, IPage page) {
+    public void execute(Context context, PageChange pageChange) {
+	IPage page  = pageChange.getLocalPage();
 	log.debug("Uploading updates to remote page: {}", page);
 
 	Date updatedAt = new UpdatePageMutation(context.api()).updatePage(page);
