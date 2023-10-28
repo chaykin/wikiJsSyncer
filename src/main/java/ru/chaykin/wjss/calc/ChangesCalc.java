@@ -36,9 +36,9 @@ public class ChangesCalc {
 	    LocalPage lp = localPages.get(pe.getKey());
 
 	    if (lp == null) {
-		addChange(changes, lp, rp, REMOTE_NEW);
+		computePageChange(changes, lp, rp).setRemoteChange(REMOTE_NEW);
 	    } else if (isRemoteUpdated(lp, rp)) {
-		addChange(changes, lp, rp, REMOTE_UPDATED);
+		computePageChange(changes, lp, rp).setRemoteChange(REMOTE_UPDATED);
 	    }
 	}
 
@@ -47,12 +47,12 @@ public class ChangesCalc {
 	    LocalPage lp = le.getValue();
 
 	    if (rp == null) {
-		addChange(changes, lp, rp, REMOTE_DELETED);
+		computePageChange(changes, lp, rp).setRemoteChange(REMOTE_DELETED);
 	    }
 	    if (lp.getContent() == null) {
-		addChange(changes, lp, rp, LOCAL_DELETED);
+		computePageChange(changes, lp, rp).setLocalChange(LOCAL_DELETED);
 	    } else if (isLocalUpdated(lp)) {
-		addChange(changes, lp, rp, LOCAL_UPDATED);
+		computePageChange(changes, lp, rp).setLocalChange(LOCAL_UPDATED);
 	    }
 	}
 
@@ -67,9 +67,8 @@ public class ChangesCalc {
 	return !Objects.equals(lp.getMd5Hash(), PageHashUtils.md5PageHash(lp));
     }
 
-    private void addChange(Map<Long, PageChange> changes, LocalPage localPage,
-		    RemotePage remotePage, ChangeType changeType) {
+    private PageChange computePageChange(Map<Long, PageChange> changes, LocalPage localPage, RemotePage remotePage) {
 	long id = Optional.<IPage>ofNullable(localPage).orElse(remotePage).getId();
-	changes.computeIfAbsent(id, k -> new PageChange(localPage, remotePage)).addChange(changeType);
+	return changes.computeIfAbsent(id, k -> new PageChange(localPage, remotePage));
     }
 }

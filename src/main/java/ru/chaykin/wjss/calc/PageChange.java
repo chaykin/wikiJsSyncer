@@ -1,9 +1,9 @@
 package ru.chaykin.wjss.calc;
 
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,27 +12,41 @@ import ru.chaykin.wjss.data.IPage;
 import ru.chaykin.wjss.data.LocalPage;
 import ru.chaykin.wjss.data.RemotePage;
 
+@Getter
 @RequiredArgsConstructor
 public class PageChange {
-
-    @Getter
     private final LocalPage localPage;
-
-    @Getter
     private final RemotePage remotePage;
 
-    private final Set<ChangeType> changes = new HashSet<>();
+    private ChangeType remoteChange;
+    private ChangeType localChange;
 
-    public void addChange(ChangeType changeType) {
-	changes.add(changeType);
+    public void setLocalChange(ChangeType changeType) {
+	if (localChange != null) {
+	    throw new IllegalArgumentException("Local change was set already");
+	}
+
+	localChange = changeType;
     }
 
-    public Set<ChangeType> getChanges() {
-	return Collections.unmodifiableSet(changes);
+    public void setRemoteChange(ChangeType changeType) {
+	if (remoteChange != null) {
+	    throw new IllegalArgumentException("Remote change was set already");
+	}
+
+	remoteChange = changeType;
     }
 
     public boolean hasConflicts() {
-	return changes.size() > 1;
+	return localChange != null && remoteChange != null;
+    }
+
+    public ChangeType getChange() {
+	if (hasConflicts()) {
+	    throw new IllegalStateException("Could not return change in conflicted state");
+	}
+
+	return Optional.ofNullable(localChange).orElse(remoteChange);
     }
 
     public IPage getPage() {
@@ -41,7 +55,11 @@ public class PageChange {
 
     @Override
     public String toString() {
-	return String.format("[%s] (%s) %s", StringUtils.join(changes, ", "),
-			getPage().getId(), getPage().getRemotePath());
+	String changes = Stream.of(localChange, remoteChange)
+			.filter(Objects::nonNull)
+			.map(ChangeType::toString)
+			.collect(Collectors.joining(", "));
+
+	return String.format("[%s] (%s) %s", changes, getPage().getId(), getPage().getRemotePath());
     }
 }

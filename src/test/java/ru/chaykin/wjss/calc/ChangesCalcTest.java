@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -48,9 +47,8 @@ class ChangesCalcTest {
 
 	var changes = toMap(new ChangesCalc(localPageFetcher, remotePageFetcher).calculateChanges());
 	Assertions.assertEquals(2, changes.size());
-
-	assertChange(changes.get(1L), REMOTE_NEW);
-	assertChange(changes.get(2L), REMOTE_NEW);
+	Assertions.assertEquals(REMOTE_NEW, changes.get(1L).getChange());
+	Assertions.assertEquals(REMOTE_NEW, changes.get(2L).getChange());
     }
 
     @Test
@@ -63,9 +61,8 @@ class ChangesCalcTest {
 
 	var changes = toMap(new ChangesCalc(localPageFetcher, remotePageFetcher).calculateChanges());
 	Assertions.assertEquals(2, changes.size());
-
-	assertChange(changes.get(1L), REMOTE_DELETED);
-	assertChange(changes.get(2L), REMOTE_DELETED);
+	Assertions.assertEquals(REMOTE_DELETED, changes.get(1L).getChange());
+	Assertions.assertEquals(REMOTE_DELETED, changes.get(2L).getChange());
     }
 
     @Test
@@ -96,8 +93,7 @@ class ChangesCalcTest {
 
 	var changes = toMap(new ChangesCalc(localPageFetcher, remotePageFetcher).calculateChanges());
 	Assertions.assertEquals(1, changes.size());
-
-	assertChange(changes.get(2L), REMOTE_UPDATED);
+	Assertions.assertEquals(REMOTE_UPDATED, changes.get(2L).getChange());
     }
 
     @Test
@@ -119,10 +115,10 @@ class ChangesCalcTest {
 	var changes = toMap(new ChangesCalc(localPageFetcher, remotePageFetcher).calculateChanges());
 	Assertions.assertEquals(4, changes.size());
 
-	assertChange(changes.get(2L), LOCAL_UPDATED);
-	assertChange(changes.get(3L), REMOTE_UPDATED);
-	assertChange(changes.get(4L), LOCAL_DELETED);
-	assertChange(changes.get(5L), REMOTE_NEW);
+	Assertions.assertEquals(LOCAL_UPDATED, changes.get(2L).getChange());
+	Assertions.assertEquals(REMOTE_UPDATED, changes.get(3L).getChange());
+	Assertions.assertEquals(LOCAL_DELETED, changes.get(4L).getChange());
+	Assertions.assertEquals(REMOTE_NEW, changes.get(5L).getChange());
     }
 
     @Test
@@ -188,7 +184,8 @@ class ChangesCalcTest {
 	return changes.stream().collect(Collectors.toMap(c -> c.getPage().getId(), Function.identity()));
     }
 
-    private void assertChange(PageChange change, ChangeType... expectedTypes) {
-	Assertions.assertEquals(Set.of(expectedTypes), change.getChanges());
+    private void assertChange(PageChange change, ChangeType expectedLocalType, ChangeType expectedRemoteType) {
+	Assertions.assertEquals(expectedLocalType, change.getLocalChange());
+	Assertions.assertEquals(expectedRemoteType, change.getRemoteChange());
     }
 }
