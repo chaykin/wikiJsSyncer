@@ -22,7 +22,6 @@ public class ClientApi {
 
     private final ObjectMapper mapper = new ObjectMapper();
     private final AuthTokenProvider tokenProvider = new AuthTokenProvider();
-
     private String authToken;
 
     public <T> T query(Class<T> type, String query) {
@@ -50,7 +49,7 @@ public class ClientApi {
 	    if (StringUtils.isNotBlank(token)) {
 		request = request.addHeader("Authorization", "Bearer " + token);
 	    }
-	    Response response = request.execute();
+	    Response response = RequestExecutor.execute(request);
 
 	    byte[] content = response.returnContent().asBytes();
 	    log.trace("Raw response: {}", () -> new String(content));

@@ -4,6 +4,14 @@ import com.beust.jcommander.Parameter;
 import ru.chaykin.wjss.conflict.ResolveType;
 
 public class AppOptions {
+    private static final AppOptions INSTANCE = new AppOptions();
+
+    public static AppOptions getOptions() {
+	return INSTANCE;
+    }
+
+    private AppOptions() {
+    }
 
     @Parameter(
 		    names = { "-f", "--force" }, order = 10,
@@ -12,11 +20,18 @@ public class AppOptions {
 		    converter = ResolveTypeConverter.class)
     private ResolveType forceResolveType;
 
+    @Parameter(names = "--always-cert-trust", order = 15, description = "Trust all server certificates")
+    private boolean alwaysCertTrust;
+
     @Parameter(names = { "-h", "--help" }, help = true, description = "Display help information", order = 20)
     private boolean help;
 
     public ResolveType getForceResolveType() {
 	return forceResolveType;
+    }
+
+    public boolean isAlwaysCertTrust() {
+	return alwaysCertTrust;
     }
 
     public boolean isHelp() {

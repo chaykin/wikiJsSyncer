@@ -26,7 +26,8 @@ public class ApplicationConfig {
 	StringBuilder result = new StringBuilder();
 	Matcher matcher = EXPRESSION_REG_EXP.matcher(expression);
 	while (matcher.find()) {
-	    String value = getSysProp(matcher.group(2));
+	    String key = matcher.group(2);
+	    String value = APPLICATION_PROP.containsKey(key) ? get(key) : getSysProp(key);
 
 	    matcher.appendReplacement(result, Matcher.quoteReplacement(value));
 	}

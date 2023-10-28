@@ -22,15 +22,14 @@ public class App {
 
     public static void main(String[] args) {
 	try {
-	    AppOptions options = new AppOptions();
+	    AppOptions options = AppOptions.getOptions();
 	    JCommander jc = JCommander.newBuilder().addObject(options).build();
 	    jc.parse(args);
 
 	    if (options.isHelp()) {
 		jc.usage();
 	    } else {
-		System.out.println(options.getForceResolveType());
-		new App(new ConflictResolverFactory(options.getForceResolveType())).execute();
+		new App(new ConflictResolverFactory()).execute();
 	    }
 	} catch (ParameterException e) {
 	    System.out.println(e.getMessage());

@@ -4,15 +4,18 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import lombok.RequiredArgsConstructor;
 import ru.chaykin.wjss.conflict.impl.MineConflictResolver;
 import ru.chaykin.wjss.conflict.impl.PostponeConflictResolver;
 import ru.chaykin.wjss.conflict.impl.TheirsConflictResolver;
 import ru.chaykin.wjss.context.Context;
+import ru.chaykin.wjss.option.AppOptions;
 
-@RequiredArgsConstructor
 public class ConflictResolverFactory {
     private final ResolveType forceResolveType;
+
+    public ConflictResolverFactory() {
+	forceResolveType = AppOptions.getOptions().getForceResolveType();
+    }
 
     public ConflictResolver createResolver(Context context) {
 	return switch (readUserSelection()) {
