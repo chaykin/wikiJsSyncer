@@ -4,13 +4,12 @@ import java.nio.file.Path;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
-import ru.chaykin.wjss.config.ApplicationConfig;
 import ru.chaykin.wjss.graphql.api.ClientApi;
 import ru.chaykin.wjss.graphql.query.PageListQuery.PageListItem;
 import ru.chaykin.wjss.graphql.query.PageQuery;
 import ru.chaykin.wjss.graphql.query.PageQuery.PageItem;
-import ru.chaykin.wjss.utils.PageContentType;
 import ru.chaykin.wjss.utils.PageHashUtils;
+import ru.chaykin.wjss.utils.PageManager;
 
 @RequiredArgsConstructor
 public class RemotePage implements IPage {
@@ -46,10 +45,7 @@ public class RemotePage implements IPage {
 
     @Override
     public Path getLocalPath() {
-	String repoPath = ApplicationConfig.get("wiki.js.pages.repository");
-	String extension = PageContentType.of(pageListItem.contentType()).getExtension();
-
-	return Path.of(repoPath, String.format("%s.%s", getRemotePath(), extension));
+	return PageManager.toLocalPath(pageListItem.contentType(), getLocale(), getRemotePath());
     }
 
     @Override
