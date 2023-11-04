@@ -1,7 +1,10 @@
 package ru.chaykin.wjss.config;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,13 +51,23 @@ public class ApplicationConfig {
     }
 
     private static Properties loadAppProp() {
-	try (InputStream in = App.class.getClassLoader().getResourceAsStream("application.properties")) {
-	    Properties prop = new Properties();
-	    prop.load(in);
+	Properties prop = new Properties();
 
-	    return prop;
+	try (InputStream in = App.class.getClassLoader().getResourceAsStream("application.properties")) {
+	    prop.load(in);
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
+
+	Path userAppProp = Path.of("./application.properties");
+	if (Files.exists(userAppProp)) {
+	    try (InputStream in = new FileInputStream(userAppProp.toFile())) {
+		prop.load(in);
+	    } catch (IOException e) {
+		throw new RuntimeException(e);
+	    }
+	}
+
+	return prop;
     }
 }
