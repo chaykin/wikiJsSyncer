@@ -42,7 +42,7 @@ public class RemoteUpdatedChangeTypeAction implements IChangeTypeAction {
 
 	    if (!remotePage.getContent().equals(localPage.getContent())) {
 		log.debug("Updating page content...");
-		Files.writeString(localPage.getLocalPath(), remotePage.getContent());
+		context.pageManager().writePageContent(localPage.getLocalPath(), remotePage.getContent());
 	    }
 	    if (!remotePage.getLocalPath().equals(localPage.getLocalPath())) {
 		log.debug("Updating page path...");

@@ -8,18 +8,19 @@ import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
 import ru.chaykin.wjss.data.LocalPage;
+import ru.chaykin.wjss.utils.PageManager;
 
 @RequiredArgsConstructor
 public class LocalPageFetcher {
     private final Connection connection;
 
-    public Map<Long, LocalPage> fetch() {
+    public Map<Long, LocalPage> fetch(PageManager pageManager) {
 	try (var statement = connection.prepareStatement("SELECT * FROM pages")) {
 	    Map<Long, LocalPage> pages = new HashMap<>();
 
 	    ResultSet rs = statement.executeQuery();
 	    while (rs.next()) {
-		LocalPage page = new LocalPage(rs);
+		LocalPage page = new LocalPage(pageManager, rs);
 		pages.put(page.getId(), page);
 	    }
 

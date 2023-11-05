@@ -18,16 +18,11 @@ import static ru.chaykin.wjss.calc.ChangeType.*;
 
 @RequiredArgsConstructor
 public class ChangesCalc {
-    private final LocalPageFetcher localPageFetcher;
-    private final RemotePageFetcher remotePageFetcher;
-
-    public ChangesCalc(Context context) {
-	this(new LocalPageFetcher(context.connection()), new RemotePageFetcher(context.api()));
-    }
+    private final Context context;
 
     public Collection<PageChange> calculateChanges() {
-	Map<Long, RemotePage> remotePages = remotePageFetcher.fetch();
-	Map<Long, LocalPage> localPages = localPageFetcher.fetch();
+	Map<Long, RemotePage> remotePages = context.remotePages();
+	Map<Long, LocalPage> localPages = context.localPages();
 
 	Map<Long, PageChange> changes = new HashMap<>();
 

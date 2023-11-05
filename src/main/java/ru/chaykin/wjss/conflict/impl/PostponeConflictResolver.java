@@ -1,7 +1,6 @@
 package ru.chaykin.wjss.conflict.impl;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
 
@@ -33,7 +32,7 @@ public class PostponeConflictResolver extends ConflictResolver {
 	String theirsPath = PathUtils.appendToFileName(page.getLocalPath(), "remote");
 
 	try {
-	    Files.writeString(Path.of(theirsPath), page.getContent());
+	    context.pageManager().writePageContent(Path.of(theirsPath), page.getContent());
 
 	    DatabaseUtils.update(context.connection(), INSERT_CONFLICTS_QUERY,
 			    page.getId(),

@@ -9,6 +9,7 @@ import ru.chaykin.wjss.data.IPage;
 import ru.chaykin.wjss.data.LocalPage;
 import ru.chaykin.wjss.data.RemotePage;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -18,7 +19,7 @@ public class PageFetcherFactory {
 	var pageMap = toMap(pages);
 
 	LocalPageFetcher fetcher = mock();
-	when(fetcher.fetch()).thenReturn(pageMap);
+	when(fetcher.fetch(any())).thenReturn(pageMap);
 
 	return fetcher;
     }

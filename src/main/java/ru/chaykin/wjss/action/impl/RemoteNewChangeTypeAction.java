@@ -1,7 +1,6 @@
 package ru.chaykin.wjss.action.impl;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.sql.SQLException;
 
 import lombok.extern.log4j.Log4j2;
@@ -27,8 +26,7 @@ public class RemoteNewChangeTypeAction implements IChangeTypeAction {
 	log.debug("Creating new local page: {}", page);
 
 	try {
-	    Files.createDirectories(page.getLocalPath().getParent());
-	    Files.writeString(page.getLocalPath(), page.getContent());
+	    context.pageManager().writePageContent(page.getLocalPath(), page.getContent());
 
 	    DatabaseUtils.update(context.connection(), INSERT_PAGE_QUERY,
 			    page.getId(),

@@ -8,7 +8,11 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+import ru.chaykin.wjss.utils.PageManager;
+
 public class LocalPage implements IPage {
+    private final PageManager pageManager;
+
     private final long id;
     private final String title;
     private final String description;
@@ -20,7 +24,9 @@ public class LocalPage implements IPage {
     private final String md5Hash;
     private final String tags;
 
-    public LocalPage(ResultSet rs) throws SQLException {
+    public LocalPage(PageManager pageManager, ResultSet rs) throws SQLException {
+	this.pageManager = pageManager;
+
 	id = rs.getLong("id");
 	title = rs.getString("title");
 	description = rs.getString("description");
@@ -82,7 +88,7 @@ public class LocalPage implements IPage {
     public String getContent() {
 	if (Files.exists(getLocalPath())) {
 	    try {
-		return Files.readString(getLocalPath());
+		return pageManager.readPageContent(getLocalPath());
 	    } catch (IOException e) {
 		throw new RuntimeException(e);
 	    }
