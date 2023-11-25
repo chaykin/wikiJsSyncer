@@ -5,10 +5,10 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 
 import lombok.extern.log4j.Log4j2;
-import ru.chaykin.wjss.calc.PageChange;
+import ru.chaykin.wjss.change.page.PageChange;
 import ru.chaykin.wjss.conflict.ConflictResolver;
 import ru.chaykin.wjss.context.Context;
-import ru.chaykin.wjss.data.IPage;
+import ru.chaykin.wjss.data.page.IPage;
 import ru.chaykin.wjss.db.DatabaseUtils;
 import ru.chaykin.wjss.utils.PathUtils;
 
@@ -26,7 +26,7 @@ public class PostponeConflictResolver extends ConflictResolver {
 
     @Override
     public void resolve(PageChange pageChange) {
-	IPage page = pageChange.getRemotePage();
+	IPage page = pageChange.getRemoteResource();
 	log.debug("Postpone conflict resolving for page: {}", page);
 
 	String theirsPath = PathUtils.appendToFileName(page.getLocalPath(), "remote");

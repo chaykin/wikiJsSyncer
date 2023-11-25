@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
-import ru.chaykin.wjss.data.IPage;
+import ru.chaykin.wjss.data.page.IPage;
 import ru.chaykin.wjss.graphql.api.ClientApi;
 
 @RequiredArgsConstructor

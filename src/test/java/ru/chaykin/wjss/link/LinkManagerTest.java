@@ -5,16 +5,16 @@ import java.util.Date;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.chaykin.wjss.calc.LocalPageFetcher;
-import ru.chaykin.wjss.calc.RemotePageFetcher;
+import ru.chaykin.wjss.calc.page.LocalPageFetcher;
+import ru.chaykin.wjss.calc.page.RemotePageFetcher;
 import ru.chaykin.wjss.context.Context;
-import ru.chaykin.wjss.utils.PageManager;
+import ru.chaykin.wjss.utils.page.PageManager;
 
-import static ru.chaykin.wjss.calc.LocalPageFactory.LOCALE;
-import static ru.chaykin.wjss.calc.LocalPageFactory.createLocalPage;
-import static ru.chaykin.wjss.calc.PageFetcherFactory.createLocalPageFetcher;
-import static ru.chaykin.wjss.calc.PageFetcherFactory.remotePageFetcher;
-import static ru.chaykin.wjss.calc.RemotePageFactory.createRemotePage;
+import static ru.chaykin.wjss.calc.page.LocalPageFactory.LOCALE;
+import static ru.chaykin.wjss.calc.page.LocalPageFactory.createLocalPage;
+import static ru.chaykin.wjss.calc.page.PageFetcherFactory.createLocalPageFetcher;
+import static ru.chaykin.wjss.calc.page.PageFetcherFactory.remotePageFetcher;
+import static ru.chaykin.wjss.calc.page.RemotePageFactory.createRemotePage;
 
 class LinkManagerTest {
     private static final String REMOTE_PAGE_CONTENT = """
@@ -31,11 +31,13 @@ class LinkManagerTest {
 
     @Test
     void wrapTest() {
-	LocalPageFetcher localPageFetcher = createLocalPageFetcher();
 	RemotePageFetcher remotePageFetcher = remotePageFetcher(
 			createRemotePage(2L, "common/p2", new Date(), "PAGE_2"));
 
-	Context context = new Context(null, null, localPageFetcher, remotePageFetcher);
+	Context context = Context.createBuilder(null, null)
+			.localPageFetcher(createLocalPageFetcher())
+			.remotePageFetcher(remotePageFetcher)
+			.build();
 	LinkManager linkManager = new LinkManager(context);
 
 	String wrapped = linkManager.wrapByLocalLinks(REMOTE_PAGE_CONTENT);
@@ -49,9 +51,11 @@ class LinkManagerTest {
     void unwrapTest() {
 	LocalPageFetcher localPageFetcher = createLocalPageFetcher(
 			createLocalPage(2L, "common/p2", new Date(), "PAGE_2"));
-	RemotePageFetcher remotePageFetcher = remotePageFetcher();
 
-	Context context = new Context(null, null, localPageFetcher, remotePageFetcher);
+	Context context = Context.createBuilder(null, null)
+			.localPageFetcher(localPageFetcher)
+			.remotePageFetcher(remotePageFetcher())
+			.build();
 	LinkManager linkManager = new LinkManager(context);
 
 	Path localPath = PageManager.toLocalPath("markdown", LOCALE, "common/p2");

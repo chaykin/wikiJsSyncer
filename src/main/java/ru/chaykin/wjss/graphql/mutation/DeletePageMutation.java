@@ -1,7 +1,7 @@
 package ru.chaykin.wjss.graphql.mutation;
 
 import lombok.RequiredArgsConstructor;
-import ru.chaykin.wjss.data.IPage;
+import ru.chaykin.wjss.data.page.IPage;
 import ru.chaykin.wjss.graphql.api.ClientApi;
 
 @RequiredArgsConstructor

@@ -13,6 +13,17 @@ CREATE TABLE IF NOT EXISTS "pages" (
 	PRIMARY KEY("id")
 );
 
+CREATE TABLE IF NOT EXISTS "assets" (
+	"id"                INTEGER NOT NULL UNIQUE,
+	"folderId"          INTEGER NOT NULL,
+	"remote_path"       TEXT NOT NULL UNIQUE,
+	"local_path"        TEXT NOT NULL UNIQUE,
+	"content_type"      TEXT NOT NULL,
+	"remote_update_at"  INTEGER NOT NULL,
+	"md5_hash"          TEXT NOT NULL,
+	PRIMARY KEY("id")
+);
+
 CREATE TABLE IF NOT EXISTS "conflicts" (
 	"id"	INTEGER NOT NULL UNIQUE,
 	"local_path_mine"	TEXT NOT NULL UNIQUE,

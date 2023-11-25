@@ -1,8 +1,10 @@
 package ru.chaykin.wjss.graphql.api;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
@@ -18,6 +20,7 @@ import static org.apache.hc.core5.http.ContentType.APPLICATION_JSON;
 
 @Log4j2
 public class ClientApi {
+    private static final String ASSET_ENDPOINT = ApplicationConfig.get("wiki.js.server");
     private static final String ENDPOINT = ApplicationConfig.get("wiki.js.graphql.endpoint");
 
     private final ObjectMapper mapper = new ObjectMapper();
@@ -41,6 +44,26 @@ public class ClientApi {
 
 	Request request = Request.post(ENDPOINT).bodyString(body, APPLICATION_JSON);
 	return executeRequest(type, request);
+    }
+
+    public void downloadAsset(String path, File destination) {
+	log.debug("Download asset: {}", path);
+	try {
+	    URI uri = new URIBuilder(URI.create(ASSET_ENDPOINT)).appendPath(path).build();
+	    Request request = Request.get(uri);
+
+	    String token = getAuthToken();
+	    if (StringUtils.isNotBlank(token)) {
+		request = request.addHeader("Authorization", "Bearer " + token);
+	    }
+
+	    Response response = RequestExecutor.execute(request);
+	    response.saveContent(destination);
+	} catch (URISyntaxException e) {
+	    throw new RuntimeException("Invalid url: " + path, e);
+	} catch (IOException e ) {
+	    throw new RuntimeException("Failed to execute request", e);
+	}
     }
 
     private <T> T executeRequest(Class<T> type, Request request) {

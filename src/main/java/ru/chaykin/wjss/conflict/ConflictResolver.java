@@ -1,7 +1,7 @@
 package ru.chaykin.wjss.conflict;
 
 import lombok.RequiredArgsConstructor;
-import ru.chaykin.wjss.calc.PageChange;
+import ru.chaykin.wjss.change.page.PageChange;
 import ru.chaykin.wjss.context.Context;
 
 @RequiredArgsConstructor

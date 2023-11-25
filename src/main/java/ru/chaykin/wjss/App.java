@@ -1,17 +1,13 @@
 package ru.chaykin.wjss;
 
-import java.sql.SQLException;
-
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import ru.chaykin.wjss.action.ChangeTypeActionFactory;
-import ru.chaykin.wjss.calc.ChangesCalc;
-import ru.chaykin.wjss.calc.PageChange;
+import ru.chaykin.wjss.change.asset.AssetChangesProcessor;
+import ru.chaykin.wjss.change.page.PageChangesProcessor;
 import ru.chaykin.wjss.conflict.ConflictResolverFactory;
 import ru.chaykin.wjss.conflict.PostponedConflictsProcessor;
-import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.context.ContextManager;
 import ru.chaykin.wjss.option.AppOptions;
 
@@ -43,26 +39,10 @@ public class App {
 	boolean success = new ContextManager().apply(
 			context -> new PostponedConflictsProcessor(context).processConflicts());
 	if (success) {
-	    var changes = new ContextManager().apply(context -> new ChangesCalc(context).calculateChanges());
-	    changes.forEach(pc -> new ContextManager().execute(context -> processChange(context, pc)));
+	    new PageChangesProcessor(conflictResolverFactory).processChanges();
+	    new AssetChangesProcessor().processChanges();
 	} else {
 	    log.debug("There is unresolved conflicts. Skip synchronization");
-	}
-    }
-
-    private void processChange(Context context, PageChange change) {
-	System.out.println(change);
-
-	try {
-	    if (change.hasConflicts()) {
-		conflictResolverFactory.createResolver(context).resolve(change);
-	    } else {
-		var action = ChangeTypeActionFactory.create(change.getChange());
-		action.execute(context, change);
-	    }
-	    context.connection().commit();
-	} catch (SQLException e) {
-	    throw new RuntimeException(e);
 	}
     }
 }

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import ru.chaykin.wjss.context.Context;
-import ru.chaykin.wjss.data.IPage;
+import ru.chaykin.wjss.data.page.IPage;
 
 @Log4j2
 @RequiredArgsConstructor

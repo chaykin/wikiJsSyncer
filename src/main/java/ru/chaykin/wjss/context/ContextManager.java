@@ -17,7 +17,7 @@ public class ContextManager {
     }
 
     public void execute(IContextExecutor executor) {
-	new DatabaseManager().execute(c -> executor.execute(new Context(c, API)));
+	new DatabaseManager().execute(c -> executor.execute(Context.createBuilder(c, API).build()));
     }
 
     public interface IContextExecutor {
