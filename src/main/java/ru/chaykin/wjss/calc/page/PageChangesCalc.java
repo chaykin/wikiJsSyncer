@@ -7,17 +7,17 @@ import ru.chaykin.wjss.change.page.PageChange;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.data.page.IPage;
 import ru.chaykin.wjss.data.page.LocalPage;
-import ru.chaykin.wjss.data.page.RemotePage;
+import ru.chaykin.wjss.data.page.ServerPage;
 import ru.chaykin.wjss.utils.page.PageHashUtils;
 
-public class PageChangesCalc extends ChangesCalc<LocalPage, RemotePage, IPage, PageChange> {
+public class PageChangesCalc extends ChangesCalc<LocalPage, ServerPage, IPage, PageChange> {
     public PageChangesCalc(Context context) {
 	super(context);
     }
 
     @Override
-    protected Map<Long, RemotePage> getRemoteResources() {
-	return context.remotePages();
+    protected Map<Long, ServerPage> getRemoteResources() {
+	return context.serverPages();
     }
 
     @Override
@@ -31,7 +31,7 @@ public class PageChangesCalc extends ChangesCalc<LocalPage, RemotePage, IPage, P
     }
 
     @Override
-    protected PageChange newResourceChange(LocalPage localPage, RemotePage remotePage) {
+    protected PageChange newResourceChange(LocalPage localPage, ServerPage remotePage) {
 	return new PageChange(localPage, remotePage);
     }
 }

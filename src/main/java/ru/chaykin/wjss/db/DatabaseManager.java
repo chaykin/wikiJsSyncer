@@ -28,7 +28,6 @@ public class DatabaseManager {
 	initDb();
 
 	try (Connection c = DriverManager.getConnection(DB_URL)) {
-	    c.setAutoCommit(false);
 	    executor.execute(c);
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);

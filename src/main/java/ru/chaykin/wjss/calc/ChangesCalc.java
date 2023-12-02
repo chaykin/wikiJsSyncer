@@ -11,13 +11,13 @@ import lombok.RequiredArgsConstructor;
 import ru.chaykin.wjss.change.ResourceChange;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.data.ILocalResource;
-import ru.chaykin.wjss.data.IRemoteResource;
 import ru.chaykin.wjss.data.IResource;
+import ru.chaykin.wjss.data.IServerResource;
 
 import static ru.chaykin.wjss.change.ChangeType.*;
 
 @RequiredArgsConstructor
-public abstract class ChangesCalc<L extends ILocalResource, R extends IRemoteResource,
+public abstract class ChangesCalc<L extends ILocalResource, R extends IServerResource,
 		C extends IResource, RC extends ResourceChange<L, R, C>> {
     protected final Context context;
 
@@ -64,7 +64,7 @@ public abstract class ChangesCalc<L extends ILocalResource, R extends IRemoteRes
     protected abstract RC newResourceChange(L localResource, R remoteResource);
 
     private boolean isRemoteUpdated(L lr, R rr) {
-	return rr.getRemoteUpdatedAt() != lr.getRemoteUpdatedAt() && !Objects.equals(rr.getMd5Hash(), lr.getMd5Hash());
+	return rr.getServerUpdatedAt() != lr.getServerUpdatedAt() && !Objects.equals(rr.getMd5Hash(), lr.getMd5Hash());
     }
 
     private boolean isLocalUpdated(L lr) {

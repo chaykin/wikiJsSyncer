@@ -85,7 +85,7 @@ public class LinkManager {
 
     private IPage getRemotePageByPath(String remotePath) {
 	if (remotePages == null) {
-	    remotePages = context.remotePages().values().stream()
+	    remotePages = context.serverPages().values().stream()
 			    .collect(Collectors.toMap(IPage::getRemotePath, Function.identity()));
 	}
 

@@ -27,7 +27,7 @@ public class LocalPageFactory {
 	when(page.getRemotePath()).thenReturn(path);
 	when(page.getLocalPath()).thenReturn(PageManager.toLocalPath(MARKDOWN.getTypeName(), LOCALE, path));
 	when(page.getContentType()).thenReturn(MARKDOWN.getTypeName());
-	when(page.getRemoteUpdatedAt()).thenReturn(updatedAt.getTime());
+	when(page.getServerUpdatedAt()).thenReturn(updatedAt.getTime());
 	when(page.getTags()).thenReturn(Collections.emptyList());
 
 	doReturn(content).when(page).getContent();

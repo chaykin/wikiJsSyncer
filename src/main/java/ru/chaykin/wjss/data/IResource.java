@@ -14,5 +14,5 @@ public interface IResource {
 
     String getMd5Hash();
 
-    long getRemoteUpdatedAt();
+    long getServerUpdatedAt();
 }

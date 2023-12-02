@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 import lombok.RequiredArgsConstructor;
 import ru.chaykin.wjss.data.asset.IAsset;
-import ru.chaykin.wjss.data.asset.RemoteAsset;
+import ru.chaykin.wjss.data.asset.ServerAsset;
 import ru.chaykin.wjss.graphql.api.ClientApi;
 import ru.chaykin.wjss.graphql.query.AssetFoldersQuery;
 import ru.chaykin.wjss.graphql.query.AssetFoldersQuery.AssetFolder;
@@ -20,17 +20,17 @@ import ru.chaykin.wjss.graphql.query.AssetListQuery;
 public class RemoteAssetFetcher {
     private final ClientApi api;
 
-    public Map<Long, RemoteAsset> fetch() {
+    public Map<Long, ServerAsset> fetch() {
 	return fetch(List.of(new AssetFolder(0, "")))
 			.collect(Collectors.toMap(IAsset::getId, Function.identity()));
     }
 
-    private Stream<RemoteAsset> fetch(List<AssetFolder> folders) {
+    private Stream<ServerAsset> fetch(List<AssetFolder> folders) {
 	long folderId = folders.getLast().id();
 
 	AssetListQuery assetsQuery = new AssetListQuery(api);
 	var assets = assetsQuery.fetchAssets(folderId).stream()
-			.map(a -> new RemoteAsset(api, a, folders));
+			.map(a -> new ServerAsset(api, a, folders));
 
 	AssetFoldersQuery foldersQuery = new AssetFoldersQuery(api);
 	var subAssets = foldersQuery.fetchAssetFolders(folderId).stream()

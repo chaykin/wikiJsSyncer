@@ -8,12 +8,13 @@ import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import ru.chaykin.wjss.data.ILocalResource;
-import ru.chaykin.wjss.data.IRemoteResource;
 import ru.chaykin.wjss.data.IResource;
+import ru.chaykin.wjss.data.IServerResource;
 
 @Getter
+@Deprecated(forRemoval = true)
 @RequiredArgsConstructor
-public class ResourceChange<L extends ILocalResource, R extends IRemoteResource, C extends IResource> {
+public class ResourceChange<L extends ILocalResource, R extends IServerResource, C extends IResource> {
     private final L localResource;
     private final R remoteResource;
 

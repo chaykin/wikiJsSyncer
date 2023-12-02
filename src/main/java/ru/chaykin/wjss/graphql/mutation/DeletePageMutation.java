@@ -31,8 +31,6 @@ public class DeletePageMutation {
 	private record Data(Pages pages) {
 	    private record Pages(Delete delete) {
 		private record Delete(ResponseResult responseResult) {
-		    private record ResponseResult(boolean succeeded, int errorCode, String slug, String message) {
-		    }
 		}
 	    }
 	}

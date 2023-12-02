@@ -12,14 +12,18 @@ import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import ru.chaykin.wjss.config.ApplicationConfig;
-import ru.chaykin.wjss.data.IRemoteResource;
+import ru.chaykin.wjss.data.IServerResource;
 import ru.chaykin.wjss.graphql.api.ClientApi;
 import ru.chaykin.wjss.graphql.query.AssetFoldersQuery.AssetFolder;
 import ru.chaykin.wjss.graphql.query.AssetListQuery.Asset;
 import ru.chaykin.wjss.utils.asset.AssetHashUtils;
 
+import static ru.chaykin.wjss.utils.PathUtils.REPO_PATH;
+
 @RequiredArgsConstructor
-public class RemoteAsset implements IAsset, IRemoteResource {
+public class ServerAsset implements IAsset, IServerResource {
+    private static final String ASSETS_SUB_PATH = "assets";
+
     private final ClientApi api;
     private final Asset asset;
     private final List<AssetFolder> folders;
@@ -56,8 +60,7 @@ public class RemoteAsset implements IAsset, IRemoteResource {
 
     @Override
     public Path getLocalPath() {
-	String repoPath = ApplicationConfig.get("wiki.js.assets.repository");
-	return Path.of(repoPath, getRemotePath());
+	return Path.of(REPO_PATH, ASSETS_SUB_PATH, getRemotePath());
     }
 
     @Override
@@ -68,14 +71,14 @@ public class RemoteAsset implements IAsset, IRemoteResource {
     @Override
     public String getMd5Hash() {
 	if (md5Hash == null) {
-	    md5Hash = AssetHashUtils.md5PageHash(this);
+	    md5Hash = AssetHashUtils.md5AssetHash(this);
 	}
 
 	return md5Hash;
     }
 
     @Override
-    public long getRemoteUpdatedAt() {
+    public long getServerUpdatedAt() {
 	return asset.updatedAt().getTime();
     }
 

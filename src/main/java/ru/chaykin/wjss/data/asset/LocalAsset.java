@@ -55,7 +55,7 @@ public class LocalAsset implements IAsset, ILocalResource {
     }
 
     @Override
-    public long getRemoteUpdatedAt() {
+    public long getServerUpdatedAt() {
 	return remoteUpdatedAt;
     }
 

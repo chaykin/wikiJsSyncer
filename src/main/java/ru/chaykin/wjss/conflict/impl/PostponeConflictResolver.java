@@ -39,7 +39,7 @@ public class PostponeConflictResolver extends ConflictResolver {
 			    page.getLocalPath(),
 			    theirsPath,
 			    page.getRemotePath(),
-			    page.getRemoteUpdatedAt(),
+			    page.getServerUpdatedAt(),
 			    page.getMd5Hash(),
 			    String.join(",", page.getTags()));
 	} catch (IOException | SQLException e) {

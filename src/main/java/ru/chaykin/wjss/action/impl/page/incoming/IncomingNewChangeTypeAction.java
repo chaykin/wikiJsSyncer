@@ -1,17 +1,22 @@
-package ru.chaykin.wjss.action.impl.page;
+package ru.chaykin.wjss.action.impl.page.incoming;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
+import ru.chaykin.wjss.action.IChangeTypeAction;
+import ru.chaykin.wjss.action.impl.page.IPageChangeTypeAction;
 import ru.chaykin.wjss.change.page.PageChange;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.data.page.IPage;
+import ru.chaykin.wjss.data.page.LocalPage;
+import ru.chaykin.wjss.data.page.ServerPage;
 import ru.chaykin.wjss.db.DatabaseUtils;
 
 @Log4j2
-public class RemoteNewChangeTypeAction implements IPageChangeTypeAction {
+public class IncomingNewChangeTypeAction
+		implements IPageChangeTypeAction, IChangeTypeAction<LocalPage, ServerPage, IPage, PageChange> {
     private static final String INSERT_PAGE_QUERY = """
 		    INSERT INTO pages(
 		    		id, title, description,
@@ -20,8 +25,8 @@ public class RemoteNewChangeTypeAction implements IPageChangeTypeAction {
 		    	VALUES(?,?,?,?,?,?,?,?,?,?)""";
 
     @Override
-    public void execute(Context context, PageChange pageChange) {
-	IPage page = pageChange.getRemoteResource();
+    public void execute(Context context, Long id) {
+	IPage page = context.serverPages().get(id);
 	log.debug("Creating new local page: {}", page);
 
 	try {
@@ -35,7 +40,7 @@ public class RemoteNewChangeTypeAction implements IPageChangeTypeAction {
 			    page.getRemotePath(),
 			    page.getLocalPath().toString(),
 			    page.getContentType(),
-			    page.getRemoteUpdatedAt(),
+			    page.getServerUpdatedAt(),
 			    page.getMd5Hash(),
 			    StringUtils.join(page.getTags(), ","));
 	} catch (IOException | SQLException e) {

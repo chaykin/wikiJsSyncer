@@ -2,20 +2,23 @@ package ru.chaykin.wjss.graphql.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.client5.http.fluent.Response;
+import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.net.URIBuilder;
 import ru.chaykin.wjss.auth.AuthTokenProvider;
 import ru.chaykin.wjss.config.ApplicationConfig;
 
+import static java.net.HttpURLConnection.HTTP_OK;
 import static org.apache.hc.core5.http.ContentType.APPLICATION_JSON;
 
 @Log4j2
@@ -46,7 +49,7 @@ public class ClientApi {
 	return executeRequest(type, request);
     }
 
-    public void downloadAsset(String path, File destination) {
+    public void downloadAsset(String path, File destination) throws IOException {
 	log.debug("Download asset: {}", path);
 	try {
 	    URI uri = new URIBuilder(URI.create(ASSET_ENDPOINT)).appendPath(path).build();
@@ -61,7 +64,30 @@ public class ClientApi {
 	    response.saveContent(destination);
 	} catch (URISyntaxException e) {
 	    throw new RuntimeException("Invalid url: " + path, e);
-	} catch (IOException e ) {
+	}
+    }
+
+    public void uploadAsset(long folderId, InputStream content, String contentType, String fileName) {
+	log.debug("Upload asset {} to: {}", fileName, folderId);
+	try {
+	    Request request = Request.post(ASSET_ENDPOINT)
+			    .body(MultipartEntityBuilder
+					    .create()
+					    .addTextBody("mediaUpload", "{\"folderId\": %s}".formatted(folderId))
+					    .addBinaryBody("mediaUpload", content, ContentType.create(contentType),
+							    fileName)
+					    .build());
+
+	    String token = getAuthToken();
+	    if (StringUtils.isNotBlank(token)) {
+		request = request.addHeader("Authorization", "Bearer " + token);
+	    }
+
+	    Response response = RequestExecutor.execute(request);
+	    if (response.returnResponse().getCode() != HTTP_OK) {
+		throw new RuntimeException("Could not upload assetv %s to %s".formatted(fileName, folderId));
+	    }
+	} catch (IOException e) {
 	    throw new RuntimeException("Failed to execute request", e);
 	}
     }

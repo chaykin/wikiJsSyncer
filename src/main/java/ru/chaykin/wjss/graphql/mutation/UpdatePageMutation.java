@@ -40,9 +40,6 @@ public class UpdatePageMutation {
 	private record Data(Pages pages) {
 	    private record Pages(Update update) {
 		private record Update(ResponseResult responseResult, Page page) {
-		    private record ResponseResult(boolean succeeded, int errorCode, String slug, String message) {
-		    }
-
 		    private record Page(Date updatedAt) {
 		    }
 		}

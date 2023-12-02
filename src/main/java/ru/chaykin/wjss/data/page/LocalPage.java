@@ -75,7 +75,7 @@ public class LocalPage implements IPage, ILocalResource {
     }
 
     @Override
-    public long getRemoteUpdatedAt() {
+    public long getServerUpdatedAt() {
 	return remoteUpdatedAt;
     }
 

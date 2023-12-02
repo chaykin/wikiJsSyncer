@@ -5,11 +5,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import ru.chaykin.wjss.calc.page.LocalPageFetcher;
-import ru.chaykin.wjss.calc.page.RemotePageFetcher;
 import ru.chaykin.wjss.data.page.IPage;
 import ru.chaykin.wjss.data.page.LocalPage;
-import ru.chaykin.wjss.data.page.RemotePage;
+import ru.chaykin.wjss.data.page.ServerPage;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -26,7 +24,7 @@ public class PageFetcherFactory {
 	return fetcher;
     }
 
-    public static RemotePageFetcher remotePageFetcher(RemotePage... pages) {
+    public static RemotePageFetcher remotePageFetcher(ServerPage... pages) {
 	var pageMap = toMap(pages);
 
 	RemotePageFetcher fetcher = mock();

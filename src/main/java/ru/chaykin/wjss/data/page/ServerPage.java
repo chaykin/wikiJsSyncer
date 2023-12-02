@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
-import ru.chaykin.wjss.data.IRemoteResource;
+import ru.chaykin.wjss.data.IServerResource;
 import ru.chaykin.wjss.graphql.api.ClientApi;
 import ru.chaykin.wjss.graphql.query.PageListQuery.PageListItem;
 import ru.chaykin.wjss.graphql.query.PageQuery;
@@ -13,7 +13,7 @@ import ru.chaykin.wjss.utils.page.PageHashUtils;
 import ru.chaykin.wjss.utils.page.PageManager;
 
 @RequiredArgsConstructor
-public class RemotePage implements IPage, IRemoteResource {
+public class ServerPage implements IPage, IServerResource {
     private final ClientApi api;
     private final PageListItem pageListItem;
 
@@ -55,7 +55,7 @@ public class RemotePage implements IPage, IRemoteResource {
     }
 
     @Override
-    public long getRemoteUpdatedAt() {
+    public long getServerUpdatedAt() {
 	return pageListItem.updatedAt().getTime();
     }
 
@@ -83,7 +83,7 @@ public class RemotePage implements IPage, IRemoteResource {
     private PageItem getPageItem() {
 	if (pageItem == null) {
 	    pageItem = new PageQuery(api).fetchPage(getId());
-	    if (pageItem.updatedAt().getTime() != getRemoteUpdatedAt()) {
+	    if (pageItem.updatedAt().getTime() != getServerUpdatedAt()) {
 		throw new RuntimeException(String.format("Page %s is out of date!", getId()));
 	    }
 	}

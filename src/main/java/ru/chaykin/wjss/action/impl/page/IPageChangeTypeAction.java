@@ -4,7 +4,8 @@ import ru.chaykin.wjss.action.IChangeTypeAction;
 import ru.chaykin.wjss.change.page.PageChange;
 import ru.chaykin.wjss.data.page.IPage;
 import ru.chaykin.wjss.data.page.LocalPage;
-import ru.chaykin.wjss.data.page.RemotePage;
+import ru.chaykin.wjss.data.page.ServerPage;
 
-public interface IPageChangeTypeAction extends IChangeTypeAction<LocalPage, RemotePage, IPage, PageChange> {
+@Deprecated(forRemoval = true)
+public interface IPageChangeTypeAction extends IChangeTypeAction<LocalPage, ServerPage, IPage, PageChange> {
 }

@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AssetHashUtils {
 
-    public static String md5PageHash(IAsset asset) {
+    public static String md5AssetHash(IAsset asset) {
 	try (InputStream content = asset.getContent()) {
 	    MessageDigest digest = DigestUtils.getMd5Digest();
 	    DigestUtils.updateDigest(digest, content);

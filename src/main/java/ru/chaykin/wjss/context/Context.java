@@ -8,9 +8,9 @@ import ru.chaykin.wjss.calc.asset.RemoteAssetFetcher;
 import ru.chaykin.wjss.calc.page.LocalPageFetcher;
 import ru.chaykin.wjss.calc.page.RemotePageFetcher;
 import ru.chaykin.wjss.data.asset.LocalAsset;
-import ru.chaykin.wjss.data.asset.RemoteAsset;
+import ru.chaykin.wjss.data.asset.ServerAsset;
 import ru.chaykin.wjss.data.page.LocalPage;
-import ru.chaykin.wjss.data.page.RemotePage;
+import ru.chaykin.wjss.data.page.ServerPage;
 import ru.chaykin.wjss.graphql.api.ClientApi;
 import ru.chaykin.wjss.utils.page.PageManager;
 
@@ -26,10 +26,10 @@ public class Context {
 
     private final PageManager pageManager;
 
-    private Map<Long, RemotePage> remotePages;
+    private Map<Long, ServerPage> remotePages;
     private Map<Long, LocalPage> localPages;
 
-    private Map<Long, RemoteAsset> remoteAssets;
+    private Map<Long, ServerAsset> remoteAssets;
     private Map<Long, LocalAsset> localAssets;
 
     public Context(Connection connection, ClientApi api,
@@ -61,7 +61,7 @@ public class Context {
 	return pageManager;
     }
 
-    public Map<Long, RemotePage> remotePages() {
+    public Map<Long, ServerPage> serverPages() {
 	if (remotePages == null) {
 	    remotePages = remotePageFetcher.fetch();
 	}
@@ -77,7 +77,7 @@ public class Context {
 	return localPages;
     }
 
-    public Map<Long, RemoteAsset> remoteAssets() {
+    public Map<Long, ServerAsset> serverAssets() {
 	if (remoteAssets == null) {
 	    remoteAssets = remoteAssetFetcher.fetch();
 	}
