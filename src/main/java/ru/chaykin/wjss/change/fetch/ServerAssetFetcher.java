@@ -17,7 +17,7 @@ import ru.chaykin.wjss.graphql.query.AssetFoldersQuery.AssetFolder;
 import ru.chaykin.wjss.graphql.query.AssetListQuery;
 
 @RequiredArgsConstructor
-public class RemoteAssetFetcher {
+public class ServerAssetFetcher {
     private final ClientApi api;
 
     public Map<Long, ServerAsset> fetch() {

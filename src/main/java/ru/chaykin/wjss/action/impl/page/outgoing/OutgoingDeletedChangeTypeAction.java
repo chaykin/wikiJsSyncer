@@ -16,7 +16,7 @@ public class OutgoingDeletedChangeTypeAction implements IChangeTypeAction {
     @Override
     public void execute(Context context, Long id) {
 	IPage page = context.localPages().get(id);
-	log.debug("Delete remote page: {}", page);
+	log.debug("Delete server page: {}", page);
 
 	try {
 	    DatabaseUtils.update(context.connection(), DELETE_PAGE_QUERY, page.getId());

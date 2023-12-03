@@ -16,9 +16,9 @@ import ru.chaykin.wjss.db.DatabaseUtils;
 public class IncomingUpdatedChangeTypeAction implements IChangeTypeAction {
     private static final String UPDATE_PAGE_QUERY = """
 		    UPDATE pages SET
-		    	remote_path = ?,
+		    	server_path = ?,
 		    	local_path = ?,
-		    	remote_update_at = ?,
+		    	server_update_at = ?,
 		    	md5_hash = ?,
 		    	tags = ?
 		    WHERE id = ?""";
@@ -32,7 +32,7 @@ public class IncomingUpdatedChangeTypeAction implements IChangeTypeAction {
 
 	try {
 	    DatabaseUtils.update(context.connection(), UPDATE_PAGE_QUERY,
-			    serverPage.getRemotePath(),
+			    serverPage.getServerPath(),
 			    serverPage.getLocalPath(),
 			    serverPage.getServerUpdatedAt(),
 			    serverPage.getMd5Hash(),

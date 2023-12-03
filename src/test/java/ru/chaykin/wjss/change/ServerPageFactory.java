@@ -9,10 +9,10 @@ import ru.chaykin.wjss.graphql.query.PageListQuery;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
-public class RemotePageFactory {
+public class ServerPageFactory {
     public static final String LOCALE = "ru";
 
-    public static ServerPage createRemotePage(long id, String path, Date updatedAt, String content) {
+    public static ServerPage createServerPage(long id, String path, Date updatedAt, String content) {
 	PageListQuery.PageListItem pli = new PageListQuery.PageListItem(id, path, LOCALE, "testTitle", "testDescr", "markdown", updatedAt,
 			Collections.emptyList());
 

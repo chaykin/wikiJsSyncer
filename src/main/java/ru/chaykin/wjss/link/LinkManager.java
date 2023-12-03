@@ -20,7 +20,7 @@ public class LinkManager {
 
     private final Context context;
 
-    private Map<String, IPage> remotePages;
+    private Map<String, IPage> serverPages;
     private Map<Path, IPage> localPages;
 
     public String wrapByLocalLinks(String content) {
@@ -47,13 +47,13 @@ public class LinkManager {
 
     private String wrapLink(Matcher matcher) {
 	String name = matcher.group(1);
-	String[] remoteFullPath = matcher.group(2).split("#");
-	String remoteBasePath = remoteFullPath[0];
-	String section = remoteFullPath.length > 1 ? ("#" + remoteFullPath[1]) : "";
+	String[] serverFullPath = matcher.group(2).split("#");
+	String serverBasePath = serverFullPath[0];
+	String section = serverFullPath.length > 1 ? ("#" + serverFullPath[1]) : "";
 
-	IPage page = getRemotePageByPath(remoteBasePath);
+	IPage page = getServerPageByPath(serverBasePath);
 	if (page == null) {
-	    log.debug("There is no page with path {}. Skip this link resolution", remoteBasePath);
+	    log.debug("There is no page with path {}. Skip this link resolution", serverBasePath);
 	    return matcher.group();
 	}
 
@@ -77,19 +77,19 @@ public class LinkManager {
 	}
 
 	String locale = page.getLocale();
-	String remotePath = page.getRemotePath();
+	String serverPath = page.getServerPath();
 
-	log.debug("Replace link: {} -> {}/{}", localPath, locale, remotePath);
-	return String.format("%s(/%s/%s%s)", name, locale, remotePath, section);
+	log.debug("Replace link: {} -> {}/{}", localPath, locale, serverPath);
+	return String.format("%s(/%s/%s%s)", name, locale, serverPath, section);
     }
 
-    private IPage getRemotePageByPath(String remotePath) {
-	if (remotePages == null) {
-	    remotePages = context.serverPages().values().stream()
-			    .collect(Collectors.toMap(IPage::getRemotePath, Function.identity()));
+    private IPage getServerPageByPath(String serverPath) {
+	if (serverPages == null) {
+	    serverPages = context.serverPages().values().stream()
+			    .collect(Collectors.toMap(IPage::getServerPath, Function.identity()));
 	}
 
-	return remotePages.get(remotePath);
+	return serverPages.get(serverPath);
     }
 
     private IPage getLocalPageByPath(Path localPath) {

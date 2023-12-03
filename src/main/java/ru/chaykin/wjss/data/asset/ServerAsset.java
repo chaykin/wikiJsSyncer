@@ -40,7 +40,7 @@ public class ServerAsset implements IAsset, IServerResource {
     public InputStream getContent() throws IOException {
 	File tmpFile = getTmpContentFile();
 	if (!isContentDownloaded) {
-	    api.downloadAsset(getRemotePath(), tmpFile);
+	    api.downloadAsset(getServerPath(), tmpFile);
 	    isContentDownloaded = true;
 	}
 
@@ -53,14 +53,14 @@ public class ServerAsset implements IAsset, IServerResource {
     }
 
     @Override
-    public String getRemotePath() {
+    public String getServerPath() {
 	String folderPath = folders.stream().map(AssetFolder::name).collect(Collectors.joining("/", "", "/"));
 	return folderPath + asset.filename();
     }
 
     @Override
     public Path getLocalPath() {
-	return Path.of(REPO_PATH, ASSETS_SUB_PATH, getRemotePath());
+	return Path.of(REPO_PATH, ASSETS_SUB_PATH, getServerPath());
     }
 
     @Override
@@ -84,8 +84,8 @@ public class ServerAsset implements IAsset, IServerResource {
 
     @Override
     public String toString() {
-	return String.format("RemoteAsset[id=%s, contentType=%s, md5Hash=%s, remotePath=%s]",
-			getId(), getContentType(), getMd5Hash(), getRemotePath());
+	return String.format("ServerAsset[id=%s, contentType=%s, md5Hash=%s, serverPath=%s]",
+			getId(), getContentType(), getMd5Hash(), getServerPath());
     }
 
     private File getTmpContentFile() throws IOException {

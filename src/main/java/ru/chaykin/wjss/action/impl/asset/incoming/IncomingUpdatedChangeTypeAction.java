@@ -23,9 +23,9 @@ public class IncomingUpdatedChangeTypeAction implements IChangeTypeAction {
     private static final String UPDATE_ASSET_QUERY = """
 		    UPDATE assets SET
 		    	folderId = ?,
-		    	remote_path = ?,
+		    	server_path = ?,
 		    	local_path = ?,
-		    	remote_update_at = ?,
+		    	server_update_at = ?,
 		    	md5_hash = ?
 		    WHERE id = ?""";
 
@@ -39,7 +39,7 @@ public class IncomingUpdatedChangeTypeAction implements IChangeTypeAction {
 	try {
 	    DatabaseUtils.update(context.connection(), UPDATE_ASSET_QUERY,
 			    serverAsset.getFolderId(),
-			    serverAsset.getRemotePath(),
+			    serverAsset.getServerPath(),
 			    serverAsset.getLocalPath(),
 			    serverAsset.getServerUpdatedAt(),
 			    serverAsset.getMd5Hash(),

@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ru.chaykin.wjss.change.fetch.LocalPageFetcher;
-import ru.chaykin.wjss.change.fetch.RemotePageFetcher;
+import ru.chaykin.wjss.change.fetch.ServerPageFetcher;
 import ru.chaykin.wjss.data.page.IPage;
 import ru.chaykin.wjss.data.page.LocalPage;
 import ru.chaykin.wjss.data.page.ServerPage;
@@ -26,10 +26,10 @@ public class PageFetcherFactory {
 	return fetcher;
     }
 
-    public static RemotePageFetcher remotePageFetcher(ServerPage... pages) {
+    public static ServerPageFetcher serverPageFetcher(ServerPage... pages) {
 	var pageMap = toMap(pages);
 
-	RemotePageFetcher fetcher = mock();
+	ServerPageFetcher fetcher = mock();
 	when(fetcher.fetch()).thenReturn(pageMap);
 
 	return fetcher;

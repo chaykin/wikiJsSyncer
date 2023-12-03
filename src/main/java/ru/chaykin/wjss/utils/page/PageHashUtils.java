@@ -10,6 +10,6 @@ import static lombok.AccessLevel.PRIVATE;
 public class PageHashUtils {
 
     public static String md5PageHash(IPage page) {
-	return DigestUtils.md5Hex(page.getContent() + page.getRemotePath() + page.getTags());
+	return DigestUtils.md5Hex(page.getContent() + page.getServerPath() + page.getTags());
     }
 }

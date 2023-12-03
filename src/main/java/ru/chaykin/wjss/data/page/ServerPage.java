@@ -40,13 +40,13 @@ public class ServerPage implements IPage, IServerResource {
     }
 
     @Override
-    public String getRemotePath() {
+    public String getServerPath() {
 	return pageListItem.path();
     }
 
     @Override
     public Path getLocalPath() {
-	return PageManager.toLocalPath(pageListItem.contentType(), getLocale(), getRemotePath());
+	return PageManager.toLocalPath(pageListItem.contentType(), getLocale(), getServerPath());
     }
 
     @Override
@@ -76,8 +76,8 @@ public class ServerPage implements IPage, IServerResource {
 
     @Override
     public String toString() {
-	return String.format("RemotePage[id=%s, contentType=%s, md5Hash=%s, remotePath=%s]",
-			getId(), getContentType(), getMd5Hash(), getRemotePath());
+	return String.format("ServerPage[id=%s, contentType=%s, md5Hash=%s, serverPath=%s]",
+			getId(), getContentType(), getMd5Hash(), getServerPath());
     }
 
     private PageItem getPageItem() {

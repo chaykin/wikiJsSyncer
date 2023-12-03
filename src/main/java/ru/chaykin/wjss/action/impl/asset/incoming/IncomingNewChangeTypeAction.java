@@ -22,14 +22,14 @@ import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 public class IncomingNewChangeTypeAction implements IChangeTypeAction {
     private static final String INSERT_ASSET_QUERY = """
 		    INSERT INTO assets(
-		    		id, folderId, remote_path, local_path,
-		    		content_type, remote_update_at, md5_hash)
+		    		id, folderId, server_path, local_path,
+		    		content_type, server_update_at, md5_hash)
 		    	VALUES(?,?,?,?,?,?,?)""";
 
     @Override
     public void execute(Context context, Long id) {
 	IAsset asset = context.serverAssets().get(id);
-	log.debug("Creating new local asset: {}", asset.getRemotePath());
+	log.debug("Creating new local asset: {}", asset.getServerPath());
 
 	try {
 	    Files.createDirectories(asset.getLocalPath().getParent());
@@ -38,14 +38,14 @@ public class IncomingNewChangeTypeAction implements IChangeTypeAction {
 	    DatabaseUtils.update(context.connection(), INSERT_ASSET_QUERY,
 			    asset.getId(),
 			    asset.getFolderId(),
-			    asset.getRemotePath(),
+			    asset.getServerPath(),
 			    asset.getLocalPath().toString(),
 			    asset.getContentType(),
 			    asset.getServerUpdatedAt(),
 			    asset.getMd5Hash());
 	} catch (HttpResponseException e) {
 	    if (e.getStatusCode() == HTTP_NOT_FOUND) {
-		log.warn("Could not download asset %s".formatted(asset.getRemotePath()), e);
+		log.warn("Could not download asset %s".formatted(asset.getServerPath()), e);
 		return;
 	    }
 	    throw new RuntimeException(e);

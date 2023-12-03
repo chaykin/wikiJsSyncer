@@ -11,7 +11,7 @@ import ru.chaykin.wjss.graphql.query.PageListQuery;
 import static java.util.function.Function.identity;
 
 @RequiredArgsConstructor
-public class RemotePageFetcher {
+public class ServerPageFetcher {
     private final ClientApi api;
 
     public Map<Long, ServerPage> fetch() {

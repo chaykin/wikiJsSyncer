@@ -6,7 +6,7 @@ public interface IResource {
 
     long getId();
 
-    String getRemotePath();
+    String getServerPath();
 
     Path getLocalPath();
 

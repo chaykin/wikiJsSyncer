@@ -15,8 +15,8 @@ public class IncomingNewChangeTypeAction implements IChangeTypeAction {
     private static final String INSERT_PAGE_QUERY = """
 		    INSERT INTO pages(
 		    		id, title, description,
-		    		locale, remote_path, local_path,
-		    		content_type, remote_update_at, md5_hash, tags)
+		    		locale, server_path, local_path,
+		    		content_type, server_update_at, md5_hash, tags)
 		    	VALUES(?,?,?,?,?,?,?,?,?,?)""";
 
     @Override
@@ -32,7 +32,7 @@ public class IncomingNewChangeTypeAction implements IChangeTypeAction {
 			    page.getTitle(),
 			    page.description(),
 			    page.getLocale(),
-			    page.getRemotePath(),
+			    page.getServerPath(),
 			    page.getLocalPath().toString(),
 			    page.getContentType(),
 			    page.getServerUpdatedAt(),

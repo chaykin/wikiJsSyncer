@@ -18,7 +18,7 @@ public class AssetHashUtils {
 	try (InputStream content = asset.getContent()) {
 	    MessageDigest digest = DigestUtils.getMd5Digest();
 	    DigestUtils.updateDigest(digest, content);
-	    DigestUtils.updateDigest(digest, asset.getRemotePath());
+	    DigestUtils.updateDigest(digest, asset.getServerPath());
 	    return Hex.encodeHexString(digest.digest());
 	} catch (IOException e) {
 	    throw new RuntimeException("Could not calculate md5 hash", e);

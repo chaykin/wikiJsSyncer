@@ -5,9 +5,9 @@ import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 import ru.chaykin.wjss.change.fetch.LocalAssetFetcher;
-import ru.chaykin.wjss.change.fetch.RemoteAssetFetcher;
+import ru.chaykin.wjss.change.fetch.ServerAssetFetcher;
 import ru.chaykin.wjss.change.fetch.LocalPageFetcher;
-import ru.chaykin.wjss.change.fetch.RemotePageFetcher;
+import ru.chaykin.wjss.change.fetch.ServerPageFetcher;
 import ru.chaykin.wjss.graphql.api.ClientApi;
 
 import static lombok.AccessLevel.PACKAGE;
@@ -18,18 +18,18 @@ public class ContextBuilder {
     private final ClientApi api;
 
     private LocalPageFetcher localPageFetcher;
-    private RemotePageFetcher remotePageFetcher;
+    private ServerPageFetcher serverPageFetcher;
 
     private LocalAssetFetcher localAssetFetcher;
-    private RemoteAssetFetcher remoteAssetFetcher;
+    private ServerAssetFetcher serverAssetFetcher;
 
     public ContextBuilder localPageFetcher(LocalPageFetcher localPageFetcher) {
 	this.localPageFetcher = localPageFetcher;
 	return this;
     }
 
-    public ContextBuilder remotePageFetcher(RemotePageFetcher remotePageFetcher) {
-	this.remotePageFetcher = remotePageFetcher;
+    public ContextBuilder serverPageFetcher(ServerPageFetcher serverPageFetcher) {
+	this.serverPageFetcher = serverPageFetcher;
 	return this;
     }
 
@@ -38,17 +38,17 @@ public class ContextBuilder {
 	return this;
     }
 
-    public ContextBuilder remoteAssetFetcher(RemoteAssetFetcher remoteAssetFetcher) {
-	this.remoteAssetFetcher = remoteAssetFetcher;
+    public ContextBuilder serverAssetFetcher(ServerAssetFetcher serverAssetFetcher) {
+	this.serverAssetFetcher = serverAssetFetcher;
 	return this;
     }
 
     public Context build() {
 	var lpf = Optional.ofNullable(localPageFetcher).orElseGet(() -> new LocalPageFetcher(connection));
-	var rpf = Optional.ofNullable(remotePageFetcher).orElseGet(() -> new RemotePageFetcher(api));
+	var rpf = Optional.ofNullable(serverPageFetcher).orElseGet(() -> new ServerPageFetcher(api));
 
 	var laf = Optional.ofNullable(localAssetFetcher).orElseGet(() -> new LocalAssetFetcher(connection));
-	var raf = Optional.ofNullable(remoteAssetFetcher).orElseGet(() -> new RemoteAssetFetcher(api));
+	var raf = Optional.ofNullable(serverAssetFetcher).orElseGet(() -> new ServerAssetFetcher(api));
 
 	return new Context(connection, api, lpf, rpf, laf, raf);
     }

@@ -24,7 +24,7 @@ public class LocalPageFactory {
 	when(page.getTitle()).thenReturn("testTitle");
 	when(page.description()).thenReturn("testDescr");
 	when(page.getLocale()).thenReturn(LOCALE);
-	when(page.getRemotePath()).thenReturn(path);
+	when(page.getServerPath()).thenReturn(path);
 	when(page.getLocalPath()).thenReturn(PageManager.toLocalPath(MARKDOWN.getTypeName(), LOCALE, path));
 	when(page.getContentType()).thenReturn(MARKDOWN.getTypeName());
 	when(page.getServerUpdatedAt()).thenReturn(updatedAt.getTime());

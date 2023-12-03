@@ -8,14 +8,14 @@ import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.chaykin.wjss.change.fetch.LocalPageFetcher;
-import ru.chaykin.wjss.change.fetch.RemotePageFetcher;
+import ru.chaykin.wjss.change.fetch.ServerPageFetcher;
 import ru.chaykin.wjss.context.Context;
 
 import static ru.chaykin.wjss.change.ChangeType.*;
 import static ru.chaykin.wjss.change.LocalPageFactory.createLocalPage;
 import static ru.chaykin.wjss.change.PageFetcherFactory.createLocalPageFetcher;
-import static ru.chaykin.wjss.change.PageFetcherFactory.remotePageFetcher;
-import static ru.chaykin.wjss.change.RemotePageFactory.createRemotePage;
+import static ru.chaykin.wjss.change.PageFetcherFactory.serverPageFetcher;
+import static ru.chaykin.wjss.change.ServerPageFactory.createServerPage;
 
 class IncomingChangesResolverTest {
 
@@ -23,21 +23,21 @@ class IncomingChangesResolverTest {
     void emptyTest() {
 	Context context = Context.createBuilder(null, null)
 			.localPageFetcher(createLocalPageFetcher())
-			.remotePageFetcher(remotePageFetcher())
+			.serverPageFetcher(serverPageFetcher())
 			.build();
 
 	Assertions.assertTrue(resolveChanges(context).isEmpty());
     }
 
     @Test
-    void remotesOnlyTest() {
-	RemotePageFetcher remotePageFetcher = remotePageFetcher(
-			createRemotePage(1L, "common/p1", new Date(), "PAGE_1"),
-			createRemotePage(2L, "common/p2", new Date(), "PAGE_2"));
+    void serversOnlyTest() {
+	ServerPageFetcher serverPageFetcher = serverPageFetcher(
+			createServerPage(1L, "common/p1", new Date(), "PAGE_1"),
+			createServerPage(2L, "common/p2", new Date(), "PAGE_2"));
 
 	Context context = Context.createBuilder(null, null)
 			.localPageFetcher(createLocalPageFetcher())
-			.remotePageFetcher(remotePageFetcher)
+			.serverPageFetcher(serverPageFetcher)
 			.build();
 
 	var changes = resolveChanges(context);
@@ -54,7 +54,7 @@ class IncomingChangesResolverTest {
 
 	Context context = Context.createBuilder(null, null)
 			.localPageFetcher(localPageFetcher)
-			.remotePageFetcher(remotePageFetcher())
+			.serverPageFetcher(serverPageFetcher())
 			.build();
 
 	var changes = resolveChanges(context);
@@ -70,13 +70,13 @@ class IncomingChangesResolverTest {
 			createLocalPage(1L, "common/p1", createdAt, "PAGE_1"),
 			createLocalPage(2L, "common/p2", createdAt, "PAGE_2"));
 
-	RemotePageFetcher remotePageFetcher = remotePageFetcher(
-			createRemotePage(1L, "common/p1", new Date(), "PAGE_1"),
-			createRemotePage(2L, "common/p2", new Date(), "PAGE_2"));
+	ServerPageFetcher serverPageFetcher = serverPageFetcher(
+			createServerPage(1L, "common/p1", new Date(), "PAGE_1"),
+			createServerPage(2L, "common/p2", new Date(), "PAGE_2"));
 
 	Context context = Context.createBuilder(null, null)
 			.localPageFetcher(localPageFetcher)
-			.remotePageFetcher(remotePageFetcher)
+			.serverPageFetcher(serverPageFetcher)
 			.build();
 
 	Assertions.assertTrue(resolveChanges(context).isEmpty());
@@ -89,13 +89,13 @@ class IncomingChangesResolverTest {
 			createLocalPage(1L, "common/p1", createdAt, "PAGE_1"),
 			createLocalPage(2L, "common/p2", createdAt, "PAGE_2"));
 
-	RemotePageFetcher remotePageFetcher = remotePageFetcher(
-			createRemotePage(1L, "common/p1", new Date(), "PAGE_1"),
-			createRemotePage(2L, "moved/p2", new Date(), "PAGE_2"));
+	ServerPageFetcher serverPageFetcher = serverPageFetcher(
+			createServerPage(1L, "common/p1", new Date(), "PAGE_1"),
+			createServerPage(2L, "moved/p2", new Date(), "PAGE_2"));
 
 	Context context = Context.createBuilder(null, null)
 			.localPageFetcher(localPageFetcher)
-			.remotePageFetcher(remotePageFetcher)
+			.serverPageFetcher(serverPageFetcher)
 			.build();
 
 	var changes = resolveChanges(context);
@@ -112,15 +112,15 @@ class IncomingChangesResolverTest {
 			createLocalPage(3L, "common/p3", createdAt, "PAGE_3"),
 			createLocalPage(4L, "common/p4", createdAt, "PAGE_4"));
 
-	RemotePageFetcher remotePageFetcher = remotePageFetcher(
-			createRemotePage(1L, "common/p1", new Date(), "PAGE_1"),
-			createRemotePage(2L, "common/p2", new Date(), "PAGE_2 (UP)"),
-			createRemotePage(3L, "common/p3", new Date(), "PAGE_3 (UP)"),
-			createRemotePage(5L, "common/p5", new Date(), "PAGE_5"));
+	ServerPageFetcher serverPageFetcher = serverPageFetcher(
+			createServerPage(1L, "common/p1", new Date(), "PAGE_1"),
+			createServerPage(2L, "common/p2", new Date(), "PAGE_2 (UP)"),
+			createServerPage(3L, "common/p3", new Date(), "PAGE_3 (UP)"),
+			createServerPage(5L, "common/p5", new Date(), "PAGE_5"));
 
 	Context context = Context.createBuilder(null, null)
 			.localPageFetcher(localPageFetcher)
-			.remotePageFetcher(remotePageFetcher)
+			.serverPageFetcher(serverPageFetcher)
 			.build();
 
 	var changes = resolveChanges(context);

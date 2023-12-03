@@ -22,9 +22,9 @@ public class PageManager {
 	this.linkManager = linkManager;
     }
 
-    public static Path toLocalPath(String type, String locale, String remotePath) {
+    public static Path toLocalPath(String type, String locale, String serverPath) {
 	String extension = PageContentType.of(type).getExtension();
-	return Path.of(REPO_PATH, PAGES_SUB_PATH, locale, String.format("%s.%s", remotePath, extension));
+	return Path.of(REPO_PATH, PAGES_SUB_PATH, locale, String.format("%s.%s", serverPath, extension));
     }
 
     public void writePageContent(Path path, String pageContent) throws IOException {

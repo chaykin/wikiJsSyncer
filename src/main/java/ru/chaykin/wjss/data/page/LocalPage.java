@@ -17,10 +17,10 @@ public class LocalPage implements IPage, ILocalResource {
     private final String title;
     private final String description;
     private final String locale;
-    private final String remotePath;
+    private final String serverPath;
     private final Path localPath;
     private final String contentType;
-    private final long remoteUpdatedAt;
+    private final long serverUpdatedAt;
     private final String md5Hash;
     private final String tags;
 
@@ -31,10 +31,10 @@ public class LocalPage implements IPage, ILocalResource {
 	title = rs.getString("title");
 	description = rs.getString("description");
 	locale = rs.getString("locale");
-	remotePath = rs.getString("remote_path");
+	serverPath = rs.getString("server_path");
 	localPath = Path.of(rs.getString("local_path"));
 	contentType = rs.getString("content_type");
-	remoteUpdatedAt = rs.getLong("remote_update_at");
+	serverUpdatedAt = rs.getLong("server_update_at");
 	md5Hash = rs.getString("md5_hash");
 	tags = rs.getString("tags");
     }
@@ -60,8 +60,8 @@ public class LocalPage implements IPage, ILocalResource {
     }
 
     @Override
-    public String getRemotePath() {
-	return remotePath;
+    public String getServerPath() {
+	return serverPath;
     }
 
     @Override
@@ -76,7 +76,7 @@ public class LocalPage implements IPage, ILocalResource {
 
     @Override
     public long getServerUpdatedAt() {
-	return remoteUpdatedAt;
+	return serverUpdatedAt;
     }
 
     @Override

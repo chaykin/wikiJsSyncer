@@ -13,19 +13,19 @@ import ru.chaykin.wjss.data.ILocalResource;
 public class LocalAsset implements IAsset, ILocalResource {
     private final long id;
     private final long folderId;
-    private final String remotePath;
+    private final String serverPath;
     private final Path localPath;
     private final String contentType;
-    private final long remoteUpdatedAt;
+    private final long serverUpdatedAt;
     private final String md5Hash;
 
     public LocalAsset(ResultSet rs) throws SQLException {
 	id = rs.getLong("id");
 	folderId = rs.getLong("folderId");
-	remotePath = rs.getString("remote_path");
+	serverPath = rs.getString("server_path");
 	localPath = Path.of(rs.getString("local_path"));
 	contentType = rs.getString("content_type");
-	remoteUpdatedAt = rs.getLong("remote_update_at");
+	serverUpdatedAt = rs.getLong("server_update_at");
 	md5Hash = rs.getString("md5_hash");
     }
 
@@ -40,8 +40,8 @@ public class LocalAsset implements IAsset, ILocalResource {
     }
 
     @Override
-    public String getRemotePath() {
-	return remotePath;
+    public String getServerPath() {
+	return serverPath;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class LocalAsset implements IAsset, ILocalResource {
 
     @Override
     public long getServerUpdatedAt() {
-	return remoteUpdatedAt;
+	return serverUpdatedAt;
     }
 
     @Override

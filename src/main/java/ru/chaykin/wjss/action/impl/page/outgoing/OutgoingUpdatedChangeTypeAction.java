@@ -15,14 +15,14 @@ import ru.chaykin.wjss.utils.page.PageHashUtils;
 public class OutgoingUpdatedChangeTypeAction implements IChangeTypeAction {
     private static final String UPDATE_PAGE_QUERY = """
 		    UPDATE pages SET
-		    	remote_update_at = ?,
+		    	server_update_at = ?,
 		    	md5_hash = ?
 		    WHERE id = ?""";
 
     @Override
     public void execute(Context context, Long id) {
 	IPage page = context.localPages().get(id);
-	log.debug("Uploading updates to remote page: {}", page);
+	log.debug("Uploading updates to server page: {}", page);
 
 	Date updatedAt = new UpdatePageMutation(context.api()).updatePage(page);
 

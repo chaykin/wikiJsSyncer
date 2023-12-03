@@ -6,18 +6,18 @@ import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.chaykin.wjss.change.fetch.LocalPageFetcher;
-import ru.chaykin.wjss.change.fetch.RemotePageFetcher;
+import ru.chaykin.wjss.change.fetch.ServerPageFetcher;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.utils.page.PageManager;
 
 import static ru.chaykin.wjss.change.LocalPageFactory.LOCALE;
 import static ru.chaykin.wjss.change.LocalPageFactory.createLocalPage;
 import static ru.chaykin.wjss.change.PageFetcherFactory.createLocalPageFetcher;
-import static ru.chaykin.wjss.change.PageFetcherFactory.remotePageFetcher;
-import static ru.chaykin.wjss.change.RemotePageFactory.createRemotePage;
+import static ru.chaykin.wjss.change.PageFetcherFactory.serverPageFetcher;
+import static ru.chaykin.wjss.change.ServerPageFactory.createServerPage;
 
 class LinkManagerTest {
-    private static final String REMOTE_PAGE_CONTENT = """
+    private static final String SERVER_PAGE_CONTENT = """
 		    Test [link-1](/ru/common/p2) delimeter-1
 		    [link-2](/ru/common/p2#section-1) delimeter-2
 		    [link-3](/ru/common/p3) delimeter-3
@@ -31,16 +31,16 @@ class LinkManagerTest {
 
     @Test
     void wrapTest() {
-	RemotePageFetcher remotePageFetcher = remotePageFetcher(
-			createRemotePage(2L, "common/p2", new Date(), "PAGE_2"));
+	ServerPageFetcher serverPageFetcher = serverPageFetcher(
+			createServerPage(2L, "common/p2", new Date(), "PAGE_2"));
 
 	Context context = Context.createBuilder(null, null)
 			.localPageFetcher(createLocalPageFetcher())
-			.remotePageFetcher(remotePageFetcher)
+			.serverPageFetcher(serverPageFetcher)
 			.build();
 	LinkManager linkManager = new LinkManager(context);
 
-	String wrapped = linkManager.wrapByLocalLinks(REMOTE_PAGE_CONTENT);
+	String wrapped = linkManager.wrapByLocalLinks(SERVER_PAGE_CONTENT);
 
 	Path localPath = PageManager.toLocalPath("markdown", LOCALE, "common/p2");
 	String expected = String.format(LOCAL_PAGE_CONTENT, localPath.toAbsolutePath());
@@ -54,7 +54,7 @@ class LinkManagerTest {
 
 	Context context = Context.createBuilder(null, null)
 			.localPageFetcher(localPageFetcher)
-			.remotePageFetcher(remotePageFetcher())
+			.serverPageFetcher(serverPageFetcher())
 			.build();
 	LinkManager linkManager = new LinkManager(context);
 
@@ -62,6 +62,6 @@ class LinkManagerTest {
 	String localPageContent = String.format(LOCAL_PAGE_CONTENT, localPath.toAbsolutePath());
 
 	String unwrapped = linkManager.unwrapLocalLinks(localPageContent);
-	Assertions.assertEquals(REMOTE_PAGE_CONTENT, unwrapped);
+	Assertions.assertEquals(SERVER_PAGE_CONTENT, unwrapped);
     }
 }

@@ -17,7 +17,7 @@ import ru.chaykin.wjss.utils.asset.AssetHashUtils;
 public class OutgoingUpdatedChangeTypeAction implements IChangeTypeAction {
     private static final String UPDATE_ASSET_QUERY = """
 		    UPDATE assets SET
-		    	remote_update_at = ?,
+		    	server_update_at = ?,
 		    	md5_hash = ?
 		    WHERE id = ?""";
 

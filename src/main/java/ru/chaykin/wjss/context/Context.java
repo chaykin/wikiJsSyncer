@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.util.Map;
 
 import ru.chaykin.wjss.change.fetch.LocalAssetFetcher;
-import ru.chaykin.wjss.change.fetch.RemoteAssetFetcher;
+import ru.chaykin.wjss.change.fetch.ServerAssetFetcher;
 import ru.chaykin.wjss.change.fetch.LocalPageFetcher;
-import ru.chaykin.wjss.change.fetch.RemotePageFetcher;
+import ru.chaykin.wjss.change.fetch.ServerPageFetcher;
 import ru.chaykin.wjss.data.asset.LocalAsset;
 import ru.chaykin.wjss.data.asset.ServerAsset;
 import ru.chaykin.wjss.data.page.LocalPage;
@@ -19,28 +19,28 @@ public class Context {
     private final ClientApi api;
 
     private final LocalPageFetcher localPageFetcher;
-    private final RemotePageFetcher remotePageFetcher;
+    private final ServerPageFetcher serverPageFetcher;
 
     private final LocalAssetFetcher localAssetFetcher;
-    private final RemoteAssetFetcher remoteAssetFetcher;
+    private final ServerAssetFetcher serverAssetFetcher;
 
     private final PageManager pageManager;
 
-    private Map<Long, ServerPage> remotePages;
+    private Map<Long, ServerPage> serverPages;
     private Map<Long, LocalPage> localPages;
 
-    private Map<Long, ServerAsset> remoteAssets;
+    private Map<Long, ServerAsset> serverAssets;
     private Map<Long, LocalAsset> localAssets;
 
     public Context(Connection connection, ClientApi api,
-		    LocalPageFetcher localPageFetcher, RemotePageFetcher remotePageFetcher,
-		    LocalAssetFetcher localAssetFetcher, RemoteAssetFetcher remoteAssetFetcher) {
+		    LocalPageFetcher localPageFetcher, ServerPageFetcher serverPageFetcher,
+		    LocalAssetFetcher localAssetFetcher, ServerAssetFetcher serverAssetFetcher) {
 	this.connection = connection;
 	this.api = api;
 	this.localPageFetcher = localPageFetcher;
-	this.remotePageFetcher = remotePageFetcher;
+	this.serverPageFetcher = serverPageFetcher;
 	this.localAssetFetcher = localAssetFetcher;
-	this.remoteAssetFetcher = remoteAssetFetcher;
+	this.serverAssetFetcher = serverAssetFetcher;
 
 	pageManager = new PageManager(this);
     }
@@ -62,11 +62,11 @@ public class Context {
     }
 
     public Map<Long, ServerPage> serverPages() {
-	if (remotePages == null) {
-	    remotePages = remotePageFetcher.fetch();
+	if (serverPages == null) {
+	    serverPages = serverPageFetcher.fetch();
 	}
 
-	return remotePages;
+	return serverPages;
     }
 
     public Map<Long, LocalPage> localPages() {
@@ -78,11 +78,11 @@ public class Context {
     }
 
     public Map<Long, ServerAsset> serverAssets() {
-	if (remoteAssets == null) {
-	    remoteAssets = remoteAssetFetcher.fetch();
+	if (serverAssets == null) {
+	    serverAssets = serverAssetFetcher.fetch();
 	}
 
-	return remoteAssets;
+	return serverAssets;
     }
 
     public Map<Long, LocalAsset> localAssets() {
