@@ -1,10 +1,12 @@
-package ru.chaykin.wjss.calc.page;
+package ru.chaykin.wjss.change;
 
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import ru.chaykin.wjss.change.fetch.LocalPageFetcher;
+import ru.chaykin.wjss.change.fetch.RemotePageFetcher;
 import ru.chaykin.wjss.data.page.IPage;
 import ru.chaykin.wjss.data.page.LocalPage;
 import ru.chaykin.wjss.data.page.ServerPage;

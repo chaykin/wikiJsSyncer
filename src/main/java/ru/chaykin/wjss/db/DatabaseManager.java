@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
@@ -24,11 +25,11 @@ public class DatabaseManager {
 
     private boolean isInitialized;
 
-    public void execute(IDbExecutor executor) {
+    public void execute(Consumer<Connection> executor) {
 	initDb();
 
 	try (Connection c = DriverManager.getConnection(DB_URL)) {
-	    executor.execute(c);
+	    executor.accept(c);
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}
@@ -66,9 +67,5 @@ public class DatabaseManager {
 
 	    throw new RuntimeException(e);
 	}
-    }
-
-    public interface IDbExecutor {
-	void execute(Connection connection) throws SQLException;
     }
 }

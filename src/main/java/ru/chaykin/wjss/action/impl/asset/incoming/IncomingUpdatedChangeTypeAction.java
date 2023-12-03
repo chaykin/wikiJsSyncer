@@ -24,7 +24,7 @@ public class IncomingUpdatedChangeTypeAction implements IChangeTypeAction {
 		    UPDATE assets SET
 		    	folderId = ?,
 		    	remote_path = ?,
-		    	local_path = ?, 
+		    	local_path = ?,
 		    	remote_update_at = ?,
 		    	md5_hash = ?
 		    WHERE id = ?""";

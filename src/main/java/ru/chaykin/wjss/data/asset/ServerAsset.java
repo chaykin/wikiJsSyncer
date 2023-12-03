@@ -18,7 +18,7 @@ import ru.chaykin.wjss.graphql.query.AssetFoldersQuery.AssetFolder;
 import ru.chaykin.wjss.graphql.query.AssetListQuery.Asset;
 import ru.chaykin.wjss.utils.asset.AssetHashUtils;
 
-import static ru.chaykin.wjss.utils.PathUtils.REPO_PATH;
+import static ru.chaykin.wjss.git.GitManager.REPO_PATH;
 
 @RequiredArgsConstructor
 public class ServerAsset implements IAsset, IServerResource {

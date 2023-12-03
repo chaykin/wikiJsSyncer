@@ -22,15 +22,16 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
-import ru.chaykin.wjss.utils.PathUtils;
+import ru.chaykin.wjss.config.ApplicationConfig;
 
 import static org.eclipse.jgit.api.ResetCommand.ResetType.HARD;
 
 @Log4j2 //TODO logging!
 public class GitManager {
+    public static final String REPO_PATH = ApplicationConfig.get("wiki.js.repo");
+
     private static final String LOCAL_BRANCH_NAME = "main";
     private static final String SERVER_BRANCH_NAME = "server";
-    private static final Path REPO_PATH = Path.of(PathUtils.REPO_PATH);
 
     private static final GitManager INSTANCE = new GitManager();
 
@@ -151,7 +152,8 @@ public class GitManager {
     }
 
     private File getRepoFile() throws IOException {
-	Files.createDirectories(REPO_PATH);
-	return REPO_PATH.toFile();
+	Path repoPath = Path.of(REPO_PATH);
+	Files.createDirectories(repoPath);
+	return repoPath.toFile();
     }
 }

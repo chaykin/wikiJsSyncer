@@ -1,6 +1,5 @@
 package ru.chaykin.wjss.auth;
 
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import ru.chaykin.wjss.config.ApplicationConfig;
 import ru.chaykin.wjss.graphql.api.ClientApi;

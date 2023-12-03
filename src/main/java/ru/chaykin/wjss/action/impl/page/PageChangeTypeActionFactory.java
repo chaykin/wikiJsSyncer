@@ -16,13 +16,6 @@ import static ru.chaykin.wjss.change.ChangeType.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PageChangeTypeActionFactory {
-    private static final Map<ChangeType, IPageChangeTypeAction> ACTIONS = Map.of(
-		    REMOTE_NEW, new IncomingNewChangeTypeAction(),
-		    REMOTE_UPDATED, new IncomingUpdatedChangeTypeAction(),
-		    REMOTE_DELETED, new IncomingDeletedChangeTypeAction(),
-		    LOCAL_UPDATED, new OutgoingUpdatedChangeTypeAction(),
-		    LOCAL_DELETED, new OutgoingDeletedChangeTypeAction());
-
     private static final Map<ChangeType, IChangeTypeAction> INCOMING_ACTIONS = Map.of(
 		    NEW, new IncomingNewChangeTypeAction(),
 		    UPDATED, new IncomingUpdatedChangeTypeAction(),
@@ -33,11 +26,6 @@ public class PageChangeTypeActionFactory {
 		    UPDATED, new OutgoingUpdatedChangeTypeAction(),
 		    DELETED, new OutgoingDeletedChangeTypeAction()
     );
-
-    @Deprecated(forRemoval = true)
-    public static IPageChangeTypeAction create(ChangeType changeType) {
-	return ACTIONS.get(changeType);
-    }
 
     public static IChangeTypeAction createIncoming(ChangeType changeType) {
 	return INCOMING_ACTIONS.get(changeType);

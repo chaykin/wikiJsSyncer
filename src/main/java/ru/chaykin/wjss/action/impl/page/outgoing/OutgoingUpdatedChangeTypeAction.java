@@ -5,21 +5,16 @@ import java.util.Date;
 
 import lombok.extern.log4j.Log4j2;
 import ru.chaykin.wjss.action.IChangeTypeAction;
-import ru.chaykin.wjss.action.impl.page.IPageChangeTypeAction;
-import ru.chaykin.wjss.change.page.PageChange;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.data.page.IPage;
-import ru.chaykin.wjss.data.page.LocalPage;
-import ru.chaykin.wjss.data.page.ServerPage;
 import ru.chaykin.wjss.db.DatabaseUtils;
 import ru.chaykin.wjss.graphql.mutation.UpdatePageMutation;
 import ru.chaykin.wjss.utils.page.PageHashUtils;
 
 @Log4j2
-public class OutgoingUpdatedChangeTypeAction
-		implements IPageChangeTypeAction, IChangeTypeAction<LocalPage, ServerPage, IPage, PageChange> {
+public class OutgoingUpdatedChangeTypeAction implements IChangeTypeAction {
     private static final String UPDATE_PAGE_QUERY = """
-		    UPDATE pages SET 
+		    UPDATE pages SET
 		    	remote_update_at = ?,
 		    	md5_hash = ?
 		    WHERE id = ?""";

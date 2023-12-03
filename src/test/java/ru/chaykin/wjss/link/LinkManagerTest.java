@@ -5,16 +5,16 @@ import java.util.Date;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.chaykin.wjss.calc.page.LocalPageFetcher;
-import ru.chaykin.wjss.calc.page.RemotePageFetcher;
+import ru.chaykin.wjss.change.fetch.LocalPageFetcher;
+import ru.chaykin.wjss.change.fetch.RemotePageFetcher;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.utils.page.PageManager;
 
-import static ru.chaykin.wjss.calc.page.LocalPageFactory.LOCALE;
-import static ru.chaykin.wjss.calc.page.LocalPageFactory.createLocalPage;
-import static ru.chaykin.wjss.calc.page.PageFetcherFactory.createLocalPageFetcher;
-import static ru.chaykin.wjss.calc.page.PageFetcherFactory.remotePageFetcher;
-import static ru.chaykin.wjss.calc.page.RemotePageFactory.createRemotePage;
+import static ru.chaykin.wjss.change.LocalPageFactory.LOCALE;
+import static ru.chaykin.wjss.change.LocalPageFactory.createLocalPage;
+import static ru.chaykin.wjss.change.PageFetcherFactory.createLocalPageFetcher;
+import static ru.chaykin.wjss.change.PageFetcherFactory.remotePageFetcher;
+import static ru.chaykin.wjss.change.RemotePageFactory.createRemotePage;
 
 class LinkManagerTest {
     private static final String REMOTE_PAGE_CONTENT = """

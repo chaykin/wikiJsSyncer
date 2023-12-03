@@ -16,7 +16,7 @@ import ru.chaykin.wjss.utils.asset.AssetHashUtils;
 @Log4j2
 public class OutgoingUpdatedChangeTypeAction implements IChangeTypeAction {
     private static final String UPDATE_ASSET_QUERY = """
-		    UPDATE assets SET 
+		    UPDATE assets SET
 		    	remote_update_at = ?,
 		    	md5_hash = ?
 		    WHERE id = ?""";

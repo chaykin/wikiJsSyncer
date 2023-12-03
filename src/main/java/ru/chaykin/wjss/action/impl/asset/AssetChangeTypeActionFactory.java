@@ -16,21 +16,6 @@ import static ru.chaykin.wjss.change.ChangeType.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AssetChangeTypeActionFactory {
-    private static final Map<ChangeType, IAssetChangeTypeAction> ACTIONS = Map.of(
-		    REMOTE_NEW, new IncomingNewChangeTypeAction(),
-		    REMOTE_UPDATED, (c, a) -> {
-			//TODO
-		    },
-		    REMOTE_DELETED, (c, a) -> {
-			//TODO
-		    },
-		    LOCAL_UPDATED, (c, a) -> {
-			//TODO
-		    },
-		    LOCAL_DELETED, (c, a) -> {
-			//TODO
-		    });
-
     private static final Map<ChangeType, IChangeTypeAction> INCOMING_ACTIONS = Map.of(
 		    NEW, new IncomingNewChangeTypeAction(),
 		    UPDATED, new IncomingUpdatedChangeTypeAction(),
@@ -41,10 +26,6 @@ public class AssetChangeTypeActionFactory {
 		    UPDATED, new OutgoingUpdatedChangeTypeAction(),
 		    DELETED, new OutgoingDeletedChangeTypeAction()
     );
-
-    public static IAssetChangeTypeAction create(ChangeType changeType) {
-	return ACTIONS.get(changeType);
-    }
 
     public static IChangeTypeAction createIncoming(ChangeType changeType) {
 	return INCOMING_ACTIONS.get(changeType);

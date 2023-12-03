@@ -6,17 +6,12 @@ import java.sql.SQLException;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import ru.chaykin.wjss.action.IChangeTypeAction;
-import ru.chaykin.wjss.action.impl.page.IPageChangeTypeAction;
-import ru.chaykin.wjss.change.page.PageChange;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.data.page.IPage;
-import ru.chaykin.wjss.data.page.LocalPage;
-import ru.chaykin.wjss.data.page.ServerPage;
 import ru.chaykin.wjss.db.DatabaseUtils;
 
 @Log4j2
-public class IncomingNewChangeTypeAction
-		implements IPageChangeTypeAction, IChangeTypeAction<LocalPage, ServerPage, IPage, PageChange> {
+public class IncomingNewChangeTypeAction implements IChangeTypeAction {
     private static final String INSERT_PAGE_QUERY = """
 		    INSERT INTO pages(
 		    		id, title, description,

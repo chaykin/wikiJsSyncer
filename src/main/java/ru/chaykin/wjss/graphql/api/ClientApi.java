@@ -54,11 +54,7 @@ public class ClientApi {
 	try {
 	    URI uri = new URIBuilder(URI.create(ASSET_ENDPOINT)).appendPath(path).build();
 	    Request request = Request.get(uri);
-
-	    String token = getAuthToken();
-	    if (StringUtils.isNotBlank(token)) {
-		request = request.addHeader("Authorization", "Bearer " + token);
-	    }
+	    addAuthHeader(request);
 
 	    Response response = RequestExecutor.execute(request);
 	    response.saveContent(destination);
@@ -78,14 +74,11 @@ public class ClientApi {
 							    fileName)
 					    .build());
 
-	    String token = getAuthToken();
-	    if (StringUtils.isNotBlank(token)) {
-		request = request.addHeader("Authorization", "Bearer " + token);
-	    }
+	    addAuthHeader(request);
 
 	    Response response = RequestExecutor.execute(request);
 	    if (response.returnResponse().getCode() != HTTP_OK) {
-		throw new RuntimeException("Could not upload assetv %s to %s".formatted(fileName, folderId));
+		throw new RuntimeException("Could not upload asset %s to %s".formatted(fileName, folderId));
 	    }
 	} catch (IOException e) {
 	    throw new RuntimeException("Failed to execute request", e);
@@ -94,10 +87,7 @@ public class ClientApi {
 
     private <T> T executeRequest(Class<T> type, Request request) {
 	try {
-	    String token = getAuthToken();
-	    if (StringUtils.isNotBlank(token)) {
-		request = request.addHeader("Authorization", "Bearer " + token);
-	    }
+	    addAuthHeader(request);
 	    Response response = RequestExecutor.execute(request);
 
 	    byte[] content = response.returnContent().asBytes();
@@ -113,6 +103,13 @@ public class ClientApi {
 	return new URIBuilder(ENDPOINT).addParameter("query", query).build();
     }
 
+    private void addAuthHeader(Request request) {
+	String token = getAuthToken();
+	if (StringUtils.isNotBlank(token)) {
+	    request.addHeader("Authorization", "Bearer " + token);
+	}
+    }
+
     private String getAuthToken() {
 	if (authToken == null) {
 	    authToken = ""; // для исключения рекурсивных вызовов
@@ -121,4 +118,5 @@ public class ClientApi {
 
 	return authToken;
     }
+
 }

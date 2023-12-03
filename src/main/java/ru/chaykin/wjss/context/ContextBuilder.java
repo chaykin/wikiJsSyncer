@@ -4,10 +4,10 @@ import java.sql.Connection;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
-import ru.chaykin.wjss.calc.asset.LocalAssetFetcher;
-import ru.chaykin.wjss.calc.asset.RemoteAssetFetcher;
-import ru.chaykin.wjss.calc.page.LocalPageFetcher;
-import ru.chaykin.wjss.calc.page.RemotePageFetcher;
+import ru.chaykin.wjss.change.fetch.LocalAssetFetcher;
+import ru.chaykin.wjss.change.fetch.RemoteAssetFetcher;
+import ru.chaykin.wjss.change.fetch.LocalPageFetcher;
+import ru.chaykin.wjss.change.fetch.RemotePageFetcher;
 import ru.chaykin.wjss.graphql.api.ClientApi;
 
 import static lombok.AccessLevel.PACKAGE;

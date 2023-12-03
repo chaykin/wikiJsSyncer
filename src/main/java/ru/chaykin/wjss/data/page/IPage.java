@@ -1,6 +1,5 @@
 package ru.chaykin.wjss.data.page;
 
-import java.nio.file.Path;
 import java.util.List;
 
 import ru.chaykin.wjss.data.IResource;

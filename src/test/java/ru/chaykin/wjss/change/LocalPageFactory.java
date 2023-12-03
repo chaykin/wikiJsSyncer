@@ -1,4 +1,4 @@
-package ru.chaykin.wjss.calc.page;
+package ru.chaykin.wjss.change;
 
 import java.util.Collections;
 import java.util.Date;

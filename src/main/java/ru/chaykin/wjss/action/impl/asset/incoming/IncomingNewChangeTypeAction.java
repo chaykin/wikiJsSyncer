@@ -12,19 +12,14 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 import org.apache.hc.client5.http.HttpResponseException;
 import ru.chaykin.wjss.action.IChangeTypeAction;
-import ru.chaykin.wjss.action.impl.asset.IAssetChangeTypeAction;
-import ru.chaykin.wjss.change.asset.AssetChange;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.data.asset.IAsset;
-import ru.chaykin.wjss.data.asset.LocalAsset;
-import ru.chaykin.wjss.data.asset.ServerAsset;
 import ru.chaykin.wjss.db.DatabaseUtils;
 
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
 @Log4j2
-public class IncomingNewChangeTypeAction
-		implements IAssetChangeTypeAction, IChangeTypeAction<LocalAsset, ServerAsset, IAsset, AssetChange> {
+public class IncomingNewChangeTypeAction implements IChangeTypeAction {
     private static final String INSERT_ASSET_QUERY = """
 		    INSERT INTO assets(
 		    		id, folderId, remote_path, local_path,

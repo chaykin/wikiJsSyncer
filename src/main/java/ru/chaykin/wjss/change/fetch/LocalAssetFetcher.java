@@ -1,4 +1,4 @@
-package ru.chaykin.wjss.calc.asset;
+package ru.chaykin.wjss.change.fetch;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -3,10 +3,10 @@ package ru.chaykin.wjss.context;
 import java.sql.Connection;
 import java.util.Map;
 
-import ru.chaykin.wjss.calc.asset.LocalAssetFetcher;
-import ru.chaykin.wjss.calc.asset.RemoteAssetFetcher;
-import ru.chaykin.wjss.calc.page.LocalPageFetcher;
-import ru.chaykin.wjss.calc.page.RemotePageFetcher;
+import ru.chaykin.wjss.change.fetch.LocalAssetFetcher;
+import ru.chaykin.wjss.change.fetch.RemoteAssetFetcher;
+import ru.chaykin.wjss.change.fetch.LocalPageFetcher;
+import ru.chaykin.wjss.change.fetch.RemotePageFetcher;
 import ru.chaykin.wjss.data.asset.LocalAsset;
 import ru.chaykin.wjss.data.asset.ServerAsset;
 import ru.chaykin.wjss.data.page.LocalPage;

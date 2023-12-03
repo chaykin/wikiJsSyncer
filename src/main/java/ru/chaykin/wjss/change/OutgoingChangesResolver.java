@@ -11,13 +11,13 @@ import org.eclipse.jgit.diff.DiffEntry;
 import ru.chaykin.wjss.data.ILocalResource;
 import ru.chaykin.wjss.data.IResource;
 import ru.chaykin.wjss.data.IServerResource;
-import ru.chaykin.wjss.utils.PathUtils;
+import ru.chaykin.wjss.git.GitManager;
 
 import static ru.chaykin.wjss.change.ChangeType.DELETED;
 import static ru.chaykin.wjss.change.ChangeType.UPDATED;
 
 public class OutgoingChangesResolver {
-    private static final Path REPO_PATH = Path.of(PathUtils.REPO_PATH);
+    private static final Path REPO_PATH = Path.of(GitManager.REPO_PATH);
 
     private Map<String, Long> localResourceByPath;
     private Map<String, Long> serverResourceByPath;

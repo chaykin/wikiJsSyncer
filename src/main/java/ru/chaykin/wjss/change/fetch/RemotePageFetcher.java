@@ -1,4 +1,4 @@
-package ru.chaykin.wjss.calc.page;
+package ru.chaykin.wjss.change.fetch;
 
 import java.util.Map;
 import java.util.stream.Collectors;

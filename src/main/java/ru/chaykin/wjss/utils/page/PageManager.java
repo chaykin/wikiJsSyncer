@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.link.LinkManager;
 
-import static ru.chaykin.wjss.utils.PathUtils.REPO_PATH;
+import static ru.chaykin.wjss.git.GitManager.REPO_PATH;
 
 public class PageManager {
     private static final String PAGES_SUB_PATH = "pages";
