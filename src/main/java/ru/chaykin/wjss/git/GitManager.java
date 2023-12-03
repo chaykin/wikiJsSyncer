@@ -5,9 +5,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import lombok.extern.log4j.Log4j2;
+import org.eclipse.jgit.api.AddCommand;
+import org.eclipse.jgit.api.CheckoutCommand.Stage;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.InitCommand;
 import org.eclipse.jgit.api.MergeCommand.FastForwardMode;
@@ -75,6 +78,18 @@ public class GitManager {
 	return merge(LOCAL_BRANCH_NAME, SERVER_BRANCH_NAME);
     }
 
+    public void resolveConflictAsOurs(List<String> paths) throws GitAPIException {
+	resolveConflict(paths, Stage.OURS);
+    }
+
+    public void resolveConflictAsTheirs(List<String> paths) throws GitAPIException {
+	resolveConflict(paths, Stage.THEIRS);
+    }
+
+    public void markAsResolved(Collection<String> paths) throws GitAPIException {
+	paths.stream().reduce(git.add(), AddCommand::addFilepattern, (c1, c2) -> c1).call();
+    }
+
     public Set<String> getConflicts() throws GitAPIException {
 	return git.status().call().getConflicting();
     }
@@ -128,6 +143,11 @@ public class GitManager {
 			.setMessage("Merge %s -> %s".formatted(srcBranchName, tgtBranchName))
 			.setFastForward(FastForwardMode.NO_FF)
 			.call();
+    }
+
+    private void resolveConflict(List<String> paths, Stage stage) throws GitAPIException {
+	git.checkout().setStage(stage).addPaths(paths).call();
+	markAsResolved(paths);
     }
 
     private File getRepoFile() throws IOException {

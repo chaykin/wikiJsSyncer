@@ -1,4 +1,4 @@
-package ru.chaykin.wjss.conflict;
+package ru.chaykin.wjss.command.conflict;
 
 import java.util.stream.Stream;
 
@@ -7,8 +7,9 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum ResolveType {
-    POSTPONE("p", "(p)ostpone"),
-    MINE("m", "(m)ine"),
+    MANUAL("m", "(m)anual"),
+    OURS("o", "(o)urs"),
+
     THEIRS("t", "(t)heirs");
 
     public final String key;

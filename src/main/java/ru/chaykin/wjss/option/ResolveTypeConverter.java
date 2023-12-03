@@ -1,7 +1,7 @@
 package ru.chaykin.wjss.option;
 
 import com.beust.jcommander.IStringConverter;
-import ru.chaykin.wjss.conflict.ResolveType;
+import ru.chaykin.wjss.command.conflict.ResolveType;
 
 public class ResolveTypeConverter implements IStringConverter<ResolveType> {
 

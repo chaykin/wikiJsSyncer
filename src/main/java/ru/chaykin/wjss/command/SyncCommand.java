@@ -12,20 +12,24 @@ import ru.chaykin.wjss.change.ChangesProcessor;
 import ru.chaykin.wjss.change.IncomingChangesResolver;
 import ru.chaykin.wjss.change.OutgoingChangesResolver;
 import ru.chaykin.wjss.context.Context;
+import ru.chaykin.wjss.context.ContextManager;
 import ru.chaykin.wjss.git.GitManager;
 import ru.chaykin.wjss.utils.ExceptionUtils;
 
 @Log4j2
-@Parameters(commandDescription = "Run synchronization with Wiki.js server")
-public class SyncCommand {
+@Parameters(commandNames = "sync", commandDescription = "Run synchronization with Wiki.js server")
+public class SyncCommand extends BaseCommand {
     private final GitManager gitMan = GitManager.instance();
 
-    public void execute(Context context) {
-	try {
-	    doExecute(context);
-	} catch (GitAPIException | IOException e) {
-	    throw new RuntimeException("Could not execute sync command", e);
-	}
+    @Override
+    public void execute() {
+	new ContextManager().execute(context -> {
+	    try {
+		doExecute(context);
+	    } catch (GitAPIException | IOException e) {
+		throw new RuntimeException("Could not execute sync command", e);
+	    }
+	});
     }
 
     public void doExecute(Context context) throws GitAPIException, IOException {
