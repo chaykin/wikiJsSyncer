@@ -16,6 +16,7 @@ import org.eclipse.jgit.api.InitCommand;
 import org.eclipse.jgit.api.MergeCommand.FastForwardMode;
 import org.eclipse.jgit.api.MergeResult;
 import org.eclipse.jgit.api.RmCommand;
+import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.lib.ObjectId;
@@ -92,7 +93,11 @@ public class GitManager {
     }
 
     public Set<String> getConflicts() throws GitAPIException {
-	return git.status().call().getConflicting();
+	return getStatus().getConflicting();
+    }
+
+    public Status getStatus() throws GitAPIException {
+	return git.status().call();
     }
 
     public Collection<DiffEntry> getHeadAffectedFiles() throws GitAPIException, IOException {

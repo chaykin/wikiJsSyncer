@@ -13,7 +13,7 @@ import ru.chaykin.wjss.command.conflict.ResolveConflictCommand;
 public class CommandFactory {
 
     public static Map<String, BaseCommand> createCommands() {
-	return Stream.of(new SyncCommand(), new ResolveConflictCommand())
+	return Stream.of(new SyncCommand(), new ResolveConflictCommand(), new StatusCommand())
 			.collect(Collectors.toMap(BaseCommand::getName, Function.identity()));
     }
 }
