@@ -27,7 +27,7 @@ import ru.chaykin.wjss.config.ApplicationConfig;
 
 import static org.eclipse.jgit.api.ResetCommand.ResetType.HARD;
 
-@Log4j2 //TODO logging!
+@Log4j2
 public class GitManager {
     public static final String REPO_PATH = ApplicationConfig.get("wiki.js.repo");
 
@@ -44,6 +44,8 @@ public class GitManager {
 	    git = initCmd.call();
 
 	    if (git.branchList().call().isEmpty()) {
+		log.debug("Creating Git repo...");
+
 		git.commit().setMessage("Initial commit").call();
 		git.branchCreate().setName(SERVER_BRANCH_NAME).call();
 	    }
@@ -89,6 +91,8 @@ public class GitManager {
     }
 
     public void markAsResolved(Collection<String> paths) throws GitAPIException {
+	log.debug("Mark conflict resolved");
+
 	paths.stream().reduce(git.add(), AddCommand::addFilepattern, (c1, c2) -> c1).call();
     }
 
@@ -124,6 +128,8 @@ public class GitManager {
     }
 
     private void checkout(String branchName) throws GitAPIException {
+	log.debug("Checking out to branch: {}", branchName);
+
 	git.checkout().setName(branchName).call();
     }
 
@@ -137,10 +143,13 @@ public class GitManager {
 	    removed.stream().reduce(git.rm(), RmCommand::addFilepattern, (c1, c2) -> c1).call();
 	}
 
+	log.debug("Commiting to branch: {}", branchName);
 	git.commit().setMessage("Commit %s changes".formatted(branchName)).call();
     }
 
     private MergeResult merge(String srcBranchName, String tgtBranchName) throws GitAPIException, IOException {
+	log.debug("Merging branches: {} -> {}", srcBranchName, tgtBranchName);
+
 	checkout(tgtBranchName);
 	ObjectId mergeBase = git.getRepository().resolve(srcBranchName);
 
@@ -152,6 +161,8 @@ public class GitManager {
     }
 
     private void resolveConflict(List<String> paths, Stage stage) throws GitAPIException {
+	log.debug("Resoling conflict as: {}", stage);
+
 	git.checkout().setStage(stage).addPaths(paths).call();
 	markAsResolved(paths);
     }
