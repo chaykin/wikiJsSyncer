@@ -26,18 +26,18 @@ public class KeyStoreManager {
 		log.debug("Using keystore {}", cacerts);
 
 		try (InputStream in = Files.newInputStream(cacerts)) {
-		    keyStore.load(in, null);
+		    keyStore.load(in, new char[0]);
 		}
 		return keyStore;
 	    }
 
 	    log.debug("Loading certificate(s) from server {}", server);
-	    keyStore.load(null, null);
+	    keyStore.load(null, new char[0]);
 	    addServerCerts(keyStore, server);
 
 	    log.debug("Creating keystore {}", cacerts);
 	    try (OutputStream out = Files.newOutputStream(cacerts)) {
-		keyStore.store(out, null);
+		keyStore.store(out, new char[0]);
 	    }
 	    return keyStore;
 	} catch (GeneralSecurityException | IOException e) {
