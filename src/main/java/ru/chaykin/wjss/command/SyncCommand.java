@@ -1,6 +1,7 @@
 package ru.chaykin.wjss.command;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import com.beust.jcommander.Parameters;
 import lombok.extern.log4j.Log4j2;
@@ -11,6 +12,7 @@ import ru.chaykin.wjss.action.impl.page.PageChangeTypeActionFactory;
 import ru.chaykin.wjss.change.ChangesProcessor;
 import ru.chaykin.wjss.change.IncomingChangesResolver;
 import ru.chaykin.wjss.change.OutgoingChangesResolver;
+import ru.chaykin.wjss.change.queue.OutgoingChangesQueueManager;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.context.ContextManager;
 import ru.chaykin.wjss.git.GitManager;
@@ -46,19 +48,7 @@ public class SyncCommand extends BaseCommand {
 	MergeResult mergeResult = gitMan.mergeServerToLocal();
 	if (mergeResult.getMergeStatus().isSuccessful()) {
 	    gitMan.mergeLocalToServer();
-	    ExceptionUtils.tryFinally(() -> {
-		try {
-		    processOutgoingChanges(context);
-		} catch (Throwable t) {
-		    try {
-			gitMan.resetHeadCommit();
-		    } catch (Throwable innerT) {
-			t.addSuppressed(innerT);
-		    }
-
-		    throw t;
-		}
-	    }, gitMan::checkoutLocal);
+	    ExceptionUtils.tryFinally(() -> processOutgoingChanges(context), gitMan::checkoutLocal);
 	} else {
 	    var conflicts = mergeResult.getConflicts().keySet();
 	    System.out.println("There are unresolved conflicts:");
@@ -92,16 +82,19 @@ public class SyncCommand extends BaseCommand {
 	changeProcessor.processChanges(incAssetChanges, AssetChangeTypeActionFactory::createIncoming);
     }
 
-    private void processOutgoingChanges(Context context) throws GitAPIException, IOException {
-	var headAffected = gitMan.getHeadAffectedFiles();
+    private void processOutgoingChanges(Context context) throws GitAPIException, IOException, SQLException {
+	OutgoingChangesQueueManager queueMan = new OutgoingChangesQueueManager(context);
+	var affected = queueMan.collectChanges();
 
 	OutgoingChangesResolver outResolver = new OutgoingChangesResolver();
 	ChangesProcessor changeProcessor = new ChangesProcessor(context);
 
-	var outPageChanges = outResolver.resolveChanges(context.localPages(), context.serverPages(), headAffected);
-	var outAssetChanges = outResolver.resolveChanges(context.localAssets(), context.serverAssets(), headAffected);
+	var outPageChanges = outResolver.resolveChanges(context.localPages(), context.serverPages(), affected);
+	var outAssetChanges = outResolver.resolveChanges(context.localAssets(), context.serverAssets(), affected);
 
 	changeProcessor.processChanges(outPageChanges, PageChangeTypeActionFactory::createOutgoing);
 	changeProcessor.processChanges(outAssetChanges, AssetChangeTypeActionFactory::createOutgoing);
+
+	queueMan.clearQueue();
     }
 }

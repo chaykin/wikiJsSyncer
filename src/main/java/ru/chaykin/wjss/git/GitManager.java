@@ -20,12 +20,12 @@ import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import ru.chaykin.wjss.config.ApplicationConfig;
-
-import static org.eclipse.jgit.api.ResetCommand.ResetType.HARD;
 
 @Log4j2
 public class GitManager {
@@ -104,27 +104,24 @@ public class GitManager {
 	return git.status().call();
     }
 
-    public Collection<DiffEntry> getHeadAffectedFiles() throws GitAPIException, IOException {
-	RevCommit head = headCommit();
-	RevCommit base = head.getParent(0);
+    public String getHeadCommitHash() throws GitAPIException {
+	return git.log().setMaxCount(1).call().iterator().next().getId().getName();
+    }
 
-	ObjectId headId = head.getTree().getId();
+    public Collection<DiffEntry> getAffectedFiles(String commitHash) throws IOException {
+	RevCommit commit = getCommit(commitHash);
+	RevCommit base = getCommit(commit.getParent(0).getName());
+
+	ObjectId commitId = commit.getTree().getId();
 	ObjectId baseId = base.getTree().getId();
 
-	TreeWalk walk = new TreeWalk(git.getRepository());
-	walk.setRecursive(true);
-	walk.setFilter(TreeFilter.ANY_DIFF);
-	walk.reset(baseId, headId);
+	try (TreeWalk walk = new TreeWalk(git.getRepository())) {
+	    walk.setRecursive(true);
+	    walk.setFilter(TreeFilter.ANY_DIFF);
+	    walk.reset(baseId, commitId);
 
-	return DiffEntry.scan(walk);
-    }
-
-    public void resetHeadCommit() throws GitAPIException {
-	git.reset().setMode(HARD).call();
-    }
-
-    private RevCommit headCommit() throws GitAPIException {
-	return git.log().setMaxCount(1).call().iterator().next();
+	    return DiffEntry.scan(walk);
+	}
     }
 
     private void checkout(String branchName) throws GitAPIException {
@@ -171,5 +168,12 @@ public class GitManager {
 	Path repoPath = Path.of(REPO_PATH);
 	Files.createDirectories(repoPath);
 	return repoPath.toFile();
+    }
+
+    private RevCommit getCommit(String commitHash) throws IOException {
+	Repository repo = git.getRepository();
+	try (RevWalk revWalk = new RevWalk(repo)) {
+	    return revWalk.parseCommit(repo.resolve(commitHash));
+	}
     }
 }

@@ -35,4 +35,9 @@ CREATE TABLE IF NOT EXISTS "conflicts" (
 	FOREIGN KEY("id") REFERENCES "pages"("id") ON DELETE CASCADE,
 	PRIMARY KEY("id")
 );
+
+CREATE TABLE IF NOT EXISTS "outgoing_queue" (
+    "queue_id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "commit_hash"   TEXT NOT NULL UNIQUE
+);
 COMMIT;

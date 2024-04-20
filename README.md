@@ -66,3 +66,15 @@ To resolve the conflict, you must create (or rename) a file with the postfix `re
 ## Roadmap
 - Add support for replacing relative links on pages with their working copy counterparts (using the `file://` protocol).
 - Add support for attachments.
+
+## V2 roadmap
+- Логирование в GitMan
+- Проверка upload changed asset
+- Настройка нормального вывода в System.out в процессе работы (REMOTE_NEW/LOCAL_UPDATED/etc)
+- Обработка ссылок на asset'ы на страницах (замена на file://)
+- Оптимизация запросов для получения списка asset'ов
+- Release v2
+
+## V3 roadmap
+- Проверка консистентности ссылок
+- Поддержка перемещения страниц/asset'ов с автоматическим обновлением ссылок (специальными cli-командами move)
