@@ -68,13 +68,13 @@ To resolve the conflict, you must create (or rename) a file with the postfix `re
 - Add support for attachments.
 
 ## V2 roadmap
-- Логирование в GitMan
-- Проверка upload changed asset
-- Настройка нормального вывода в System.out в процессе работы (REMOTE_NEW/LOCAL_UPDATED/etc)
-- Обработка ссылок на asset'ы на страницах (замена на file://)
-- Оптимизация запросов для получения списка asset'ов
+- Add nice-readable print to System.out as it was in v1 (REMOTE_NEW/LOCAL_UPDATED/etc)
+- Add support sync pages and assets separately
+- Processing asset links on pages (replace by `file://`)
+- Optimize GraphQL queries for fetch asset list (batch/combine)
+- Add Gradle release profile (or something) with less log level in log4j
 - Release v2
 
 ## V3 roadmap
-- Проверка консистентности ссылок
-- Поддержка перемещения страниц/asset'ов с автоматическим обновлением ссылок (специальными cli-командами move)
+- Link consistent checker (List all invalid links, that can be appeared with page rename/moving)
+- Add move page/asset operation with auto-update links (cli-command `move`)
