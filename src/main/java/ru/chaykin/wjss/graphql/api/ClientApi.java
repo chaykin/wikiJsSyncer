@@ -66,7 +66,8 @@ public class ClientApi {
     public void uploadAsset(long folderId, InputStream content, String contentType, String fileName) {
 	log.debug("Upload asset {} to: {}", fileName, folderId);
 	try {
-	    Request request = Request.post(ASSET_ENDPOINT)
+	    URI uri = new URIBuilder(URI.create(ASSET_ENDPOINT)).appendPath("u").build();
+	    Request request = Request.post(uri)
 			    .body(MultipartEntityBuilder
 					    .create()
 					    .addTextBody("mediaUpload", "{\"folderId\": %s}".formatted(folderId))
@@ -80,7 +81,7 @@ public class ClientApi {
 	    if (response.returnResponse().getCode() != HTTP_OK) {
 		throw new RuntimeException("Could not upload asset %s to %s".formatted(fileName, folderId));
 	    }
-	} catch (IOException e) {
+	} catch (IOException | URISyntaxException e) {
 	    throw new RuntimeException("Failed to execute request", e);
 	}
     }

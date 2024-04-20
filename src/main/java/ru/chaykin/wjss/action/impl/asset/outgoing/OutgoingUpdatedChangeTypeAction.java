@@ -53,7 +53,7 @@ public class OutgoingUpdatedChangeTypeAction implements IChangeTypeAction {
 
     private Date fetchUpdatedAt(Context context, IAsset asset) {
 	return new AssetListQuery(context.api()).fetchAssets(asset.getFolderId()).stream()
-			.filter(a -> a.id() == asset.getFolderId())
+			.filter(a -> a.id() == asset.getId())
 			.map(AssetListQuery.Asset::updatedAt).findAny()
 			.orElseThrow(() -> new RuntimeException("Could not find updated asset %s".formatted(asset)));
     }
