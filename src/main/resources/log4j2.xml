@@ -2,7 +2,7 @@
 <Configuration status="INFO">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %msg%n" />
+            <PatternLayout pattern="${CONSOLE_PATTERN}" />
         </Console>
         <RollingFile name="LogFile" immediateFlush="false" append="true"
                      fileName="logs/ws.log" filePattern="logs/ws.log%d{yyyy-MM-dd}.log" >
@@ -15,7 +15,7 @@
             <AppenderRef ref="Console" />
             <AppenderRef ref="LogFile" />
         </Root>
-        <Logger name="ru.chaykin" level="debug" additivity="false">
+        <Logger name="ru.chaykin" level="${CONSOLE_LOG_LEVEL}" additivity="false">
             <AppenderRef ref="Console" />
         </Logger>
     </Loggers>

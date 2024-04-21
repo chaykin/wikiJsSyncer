@@ -64,17 +64,11 @@ To resolve the conflict, you must create (or rename) a file with the postfix `re
 - Do not create/move pages in the working copy - it is not supported.
 
 ## Roadmap
-- Add support for replacing relative links on pages with their working copy counterparts (using the `file://` protocol).
-- Add support for attachments.
-
-## V2 roadmap
-- Add nice-readable print to System.out as it was in v1 (REMOTE_NEW/LOCAL_UPDATED/etc)
+### v2.0
 - Add support sync pages and assets separately
 - Processing asset links on pages (replace by `file://`)
 - Optimize GraphQL queries for fetch asset list (batch/combine)
-- Add Gradle release profile (or something) with less log level in log4j
-- Release v2
 
-## V3 roadmap
+### v2.1
 - Link consistent checker (List all invalid links, that can be appeared with page rename/moving)
 - Add move page/asset operation with auto-update links (cli-command `move`)
