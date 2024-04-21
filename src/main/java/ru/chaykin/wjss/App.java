@@ -4,6 +4,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import ru.chaykin.wjss.command.CommandFactory;
 import ru.chaykin.wjss.option.AppOptions;
 
@@ -27,15 +28,19 @@ public class App {
 		jc.usage();
 	    } else {
 		String command = jc.getParsedCommand();
-		log.debug("Execute command: {}", command);
+		if (StringUtils.isBlank(command)) {
+		    jc.usage();
+		    System.exit(ExitCode.INVALID_COMMAND.code);
+		}
 
+		log.debug("Execute command: {}", command);
 		commands.get(command).execute();
 	    }
 	} catch (ParameterException e) {
 	    System.out.println(e.getMessage());
 
 	    e.usage();
-	    System.exit(1);
+	    System.exit(ExitCode.INVALID_PARAMS.code);
 	}
     }
 }

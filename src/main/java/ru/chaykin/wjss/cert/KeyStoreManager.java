@@ -12,6 +12,7 @@ import java.security.cert.X509Certificate;
 import java.util.Scanner;
 
 import lombok.extern.log4j.Log4j2;
+import ru.chaykin.wjss.ExitCode;
 import ru.chaykin.wjss.option.AppOptions;
 
 @Log4j2
@@ -69,7 +70,7 @@ public class KeyStoreManager {
 		if (key.equalsIgnoreCase("y")) {
 		    return;
 		} else if (key.equalsIgnoreCase("n")) {
-		    System.exit(5);
+		    System.exit(ExitCode.NOT_TRUSTED_CERT.code);
 		}
 	    }
 	}
