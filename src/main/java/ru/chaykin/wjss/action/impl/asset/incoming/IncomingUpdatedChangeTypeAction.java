@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
-import ru.chaykin.wjss.action.IChangeTypeAction;
+import ru.chaykin.wjss.action.ChangeTypeAction;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.data.asset.LocalAsset;
 import ru.chaykin.wjss.data.asset.ServerAsset;
@@ -19,7 +19,7 @@ import ru.chaykin.wjss.db.DatabaseUtils;
 import ru.chaykin.wjss.utils.asset.AssetHashUtils;
 
 @Log4j2
-public class IncomingUpdatedChangeTypeAction implements IChangeTypeAction {
+public class IncomingUpdatedChangeTypeAction extends ChangeTypeAction {
     private static final String UPDATE_ASSET_QUERY = """
 		    UPDATE assets SET
 		    	folderId = ?,
@@ -30,9 +30,9 @@ public class IncomingUpdatedChangeTypeAction implements IChangeTypeAction {
 		    WHERE id = ?""";
 
     @Override
-    public void execute(Context context, Long id) {
+    public void doExecute(Context context, Long id) {
 	LocalAsset localAsset = context.localAssets().get(id);
-	ServerAsset serverAsset = context.serverAssets().get(id);
+	ServerAsset serverAsset = actionResource(context, id);
 
 	log.debug("Updating exists local asset: {}", localAsset);
 
@@ -62,5 +62,10 @@ public class IncomingUpdatedChangeTypeAction implements IChangeTypeAction {
 	} catch (IOException | SQLException e) {
 	    throw new RuntimeException(e);
 	}
+    }
+
+    @Override
+    public ServerAsset actionResource(Context context, Long id) {
+	return context.serverAssets().get(id);
     }
 }

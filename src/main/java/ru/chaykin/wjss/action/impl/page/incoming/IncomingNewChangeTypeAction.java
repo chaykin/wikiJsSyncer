@@ -5,13 +5,13 @@ import java.sql.SQLException;
 
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
-import ru.chaykin.wjss.action.IChangeTypeAction;
+import ru.chaykin.wjss.action.ChangeTypeAction;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.data.page.IPage;
 import ru.chaykin.wjss.db.DatabaseUtils;
 
 @Log4j2
-public class IncomingNewChangeTypeAction implements IChangeTypeAction {
+public class IncomingNewChangeTypeAction extends ChangeTypeAction {
     private static final String INSERT_PAGE_QUERY = """
 		    INSERT INTO pages(
 		    		id, title, description,
@@ -20,8 +20,8 @@ public class IncomingNewChangeTypeAction implements IChangeTypeAction {
 		    	VALUES(?,?,?,?,?,?,?,?,?,?)""";
 
     @Override
-    public void execute(Context context, Long id) {
-	IPage page = context.serverPages().get(id);
+    public void doExecute(Context context, Long id) {
+	IPage page = actionResource(context, id);
 	log.debug("Creating new local page: {}", page);
 
 	try {
@@ -41,5 +41,10 @@ public class IncomingNewChangeTypeAction implements IChangeTypeAction {
 	} catch (IOException | SQLException e) {
 	    throw new RuntimeException(e);
 	}
+    }
+
+    @Override
+    public IPage actionResource(Context context, Long id) {
+	return context.serverPages().get(id);
     }
 }

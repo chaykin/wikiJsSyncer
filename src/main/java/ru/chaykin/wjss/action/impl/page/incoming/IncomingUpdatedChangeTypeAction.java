@@ -6,14 +6,14 @@ import java.sql.SQLException;
 
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
-import ru.chaykin.wjss.action.IChangeTypeAction;
+import ru.chaykin.wjss.action.ChangeTypeAction;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.data.page.LocalPage;
 import ru.chaykin.wjss.data.page.ServerPage;
 import ru.chaykin.wjss.db.DatabaseUtils;
 
 @Log4j2
-public class IncomingUpdatedChangeTypeAction implements IChangeTypeAction {
+public class IncomingUpdatedChangeTypeAction extends ChangeTypeAction {
     private static final String UPDATE_PAGE_QUERY = """
 		    UPDATE pages SET
 		    	server_path = ?,
@@ -24,9 +24,9 @@ public class IncomingUpdatedChangeTypeAction implements IChangeTypeAction {
 		    WHERE id = ?""";
 
     @Override
-    public void execute(Context context, Long id) {
+    public void doExecute(Context context, Long id) {
 	LocalPage localPage = context.localPages().get(id);
-	ServerPage serverPage = context.serverPages().get(id);
+	ServerPage serverPage = actionResource(context, id);
 
 	log.debug("Updating exists local page: {}", localPage);
 
@@ -51,5 +51,10 @@ public class IncomingUpdatedChangeTypeAction implements IChangeTypeAction {
 	} catch (IOException | SQLException e) {
 	    throw new RuntimeException(e);
 	}
+    }
+
+    @Override
+    public ServerPage actionResource(Context context, Long id) {
+	return context.serverPages().get(id);
     }
 }

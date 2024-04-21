@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.Date;
 
 import lombok.extern.log4j.Log4j2;
-import ru.chaykin.wjss.action.IChangeTypeAction;
+import ru.chaykin.wjss.action.ChangeTypeAction;
 import ru.chaykin.wjss.context.Context;
 import ru.chaykin.wjss.data.asset.IAsset;
 import ru.chaykin.wjss.db.DatabaseUtils;
@@ -14,7 +14,7 @@ import ru.chaykin.wjss.graphql.query.AssetListQuery;
 import ru.chaykin.wjss.utils.asset.AssetHashUtils;
 
 @Log4j2
-public class OutgoingUpdatedChangeTypeAction implements IChangeTypeAction {
+public class OutgoingUpdatedChangeTypeAction extends ChangeTypeAction {
     private static final String UPDATE_ASSET_QUERY = """
 		    UPDATE assets SET
 		    	server_update_at = ?,
@@ -22,8 +22,8 @@ public class OutgoingUpdatedChangeTypeAction implements IChangeTypeAction {
 		    WHERE id = ?""";
 
     @Override
-    public void execute(Context context, Long id) {
-	IAsset asset = context.localAssets().get(id);
+    public void doExecute(Context context, Long id) {
+	IAsset asset = actionResource(context, id);
 
 	log.debug("Uploading updates to server asset: {}", asset);
 
@@ -36,6 +36,11 @@ public class OutgoingUpdatedChangeTypeAction implements IChangeTypeAction {
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}
+    }
+
+    @Override
+    public IAsset actionResource(Context context, Long id) {
+	return context.localAssets().get(id);
     }
 
     private Date uploadAsset(Context context, IAsset asset) {

@@ -21,12 +21,15 @@ import ru.chaykin.wjss.utils.ExceptionUtils;
 @Log4j2
 @Parameters(commandNames = "sync", commandDescription = "Run synchronization with Wiki.js server")
 public class SyncCommand extends BaseCommand {
+    private static final String INDENT = "  ";
+
     private final GitManager gitMan = GitManager.instance();
 
     @Override
     public void execute() {
 	new ContextManager().execute(context -> {
 	    try {
+		System.out.println("Collect changes...");
 		doExecute(context);
 	    } catch (GitAPIException | IOException e) {
 		throw new RuntimeException("Could not execute sync command", e);
@@ -72,28 +75,40 @@ public class SyncCommand extends BaseCommand {
     }
 
     private void processIncomingChanges(Context context) {
+	System.out.println("Processing incoming changes...");
+
 	IncomingChangesResolver incResolver = new IncomingChangesResolver();
-	ChangesProcessor changeProcessor = new ChangesProcessor(context);
+	ChangesProcessor changeProcessor = new ChangesProcessor(context, INDENT);
 
 	var incPageChanges = incResolver.resolveChanges(context.localPages(), context.serverPages());
 	var incAssetChanges = incResolver.resolveChanges(context.localAssets(), context.serverAssets());
 
-	changeProcessor.processChanges(incPageChanges, PageChangeTypeActionFactory::createIncoming);
-	changeProcessor.processChanges(incAssetChanges, AssetChangeTypeActionFactory::createIncoming);
+	boolean hasChanges = false;
+	hasChanges |= changeProcessor.processChanges(incPageChanges, PageChangeTypeActionFactory::createIncoming);
+	hasChanges |= changeProcessor.processChanges(incAssetChanges, AssetChangeTypeActionFactory::createIncoming);
+	if (!hasChanges) {
+	    System.out.printf("%sUP-TO-DATE%n", INDENT);
+	}
     }
 
     private void processOutgoingChanges(Context context) throws GitAPIException, IOException, SQLException {
+	System.out.println("Processing outgoing changes...");
+
 	OutgoingChangesQueueManager queueMan = new OutgoingChangesQueueManager(context);
 	var affected = queueMan.collectChanges();
 
 	OutgoingChangesResolver outResolver = new OutgoingChangesResolver();
-	ChangesProcessor changeProcessor = new ChangesProcessor(context);
+	ChangesProcessor changeProcessor = new ChangesProcessor(context, INDENT);
 
 	var outPageChanges = outResolver.resolveChanges(context.localPages(), context.serverPages(), affected);
 	var outAssetChanges = outResolver.resolveChanges(context.localAssets(), context.serverAssets(), affected);
 
-	changeProcessor.processChanges(outPageChanges, PageChangeTypeActionFactory::createOutgoing);
-	changeProcessor.processChanges(outAssetChanges, AssetChangeTypeActionFactory::createOutgoing);
+	boolean hasChanges = false;
+	hasChanges |= changeProcessor.processChanges(outPageChanges, PageChangeTypeActionFactory::createOutgoing);
+	hasChanges |= changeProcessor.processChanges(outAssetChanges, AssetChangeTypeActionFactory::createOutgoing);
+	if (!hasChanges) {
+	    System.out.printf("%sUP-TO-DATE%n", INDENT);
+	}
 
 	queueMan.clearQueue();
     }
