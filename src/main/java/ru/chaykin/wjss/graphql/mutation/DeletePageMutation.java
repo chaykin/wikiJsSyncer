@@ -6,7 +6,7 @@ import ru.chaykin.wjss.graphql.api.ClientApi;
 
 @RequiredArgsConstructor
 public class DeletePageMutation {
-    private static final String UPDATE_MUTATION = """
+    private static final String DELETE_MUTATION = """
 		    mutation {
 		    	pages {
 		    		delete(id: %s) {
@@ -18,7 +18,7 @@ public class DeletePageMutation {
     private final ClientApi api;
 
     public void deletePage(IPage page) {
-	String mutation = String.format(UPDATE_MUTATION, page.getId());
+	String mutation = String.format(DELETE_MUTATION, page.getId());
 
 	//noinspection uncheckeds
 	var result = api.mutation(Type.class, mutation).data().pages().delete().responseResult();

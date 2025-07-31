@@ -1,6 +1,7 @@
 package ru.chaykin.wjss.graphql.mutation.auth;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.text.StringEscapeUtils;
 import ru.chaykin.wjss.graphql.api.ClientApi;
 import ru.chaykin.wjss.graphql.model.auth.AuthInfo;
 
@@ -19,7 +20,7 @@ public class AuthMutation {
     private final ClientApi api;
 
     public AuthInfo auth(String user, String password, String strategy) {
-	String mutation = String.format(AUTH_MUTATION, user, password, strategy);
+	String mutation = String.format(AUTH_MUTATION, user, StringEscapeUtils.escapeJava(password), strategy);
 
 	//noinspection uncheckeds
 	Login login = api.mutation(Type.class, mutation).data().authentication().login();
